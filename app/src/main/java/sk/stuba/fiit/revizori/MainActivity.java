@@ -4,9 +4,9 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,21 +19,26 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.android.volley.*;
 import com.android.volley.toolbox.StringRequest;
+import com.google.android.gms.drive.query.SortableField;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+import sk.stuba.fiit.revizori.backendless.BackendlessRequest;
+import sk.stuba.fiit.revizori.service.RevizorService;
+
+public class MainActivity extends AppCompatActivity implements
+        NavigationView.OnNavigationItemSelectedListener,
+        SwipeRefreshLayout.OnRefreshListener {
+
+
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +51,12 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                //setContentView(R.layout.activity_create_post);
+                Intent intent = new Intent(MainActivity.this, CreatePostActivity.class);
+                startActivity(intent);
+
+//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+//                        .setAction("Action", null).show();
             }
         });
 
@@ -60,11 +69,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this);
 
-        RequestQueue queue = VolleySingleton.getInstance(this).getRequestQueue();
-        String url = "https://api.backendless.com/v1/data/revizor";
 
-        StringRequest getRequest = new BackendlessRequest(Request.Method.GET, url,
+
+
+        RequestQueue queue = VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue();
+
+        StringRequest getRequest =  new BackendlessRequest(Request.Method.GET, "/revizor",
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -100,7 +113,7 @@ public class MainActivity extends AppCompatActivity
                         alertDialog.show();
                     }
                 }
-        );
+        ).getRequest();
         queue.add(getRequest);
 
 
@@ -163,5 +176,11 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onRefresh(){
+        RevizorService rs = RevizorService.getInstance();
+        rs.getAll();
     }
 }
