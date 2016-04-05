@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.View;
 import android.support.design.widget.NavigationView;
@@ -22,7 +21,6 @@ import android.widget.ListView;
 
 import com.android.volley.*;
 import com.android.volley.toolbox.StringRequest;
-import com.google.android.gms.drive.query.SortableField;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 //setContentView(R.layout.activity_create_post);
-                Intent intent = new Intent(MainActivity.this, CreatePostActivity.class);
+                Intent intent = new Intent(MainActivity.this, CreateRevizorActivity.class);
                 startActivity(intent);
 
 //                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
@@ -124,8 +122,8 @@ public class MainActivity extends AppCompatActivity implements
         ListView listview = (ListView) findViewById(R.id.listView);
 
         //custom row layout
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.row_layout, R.id.lineNumber, lineNumbers);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(Revizori.getAppContext(),
+                R.layout.row_layout, R.id.line_number, lineNumbers);
         listview.setAdapter(adapter);
     }
     @Override
@@ -182,5 +180,6 @@ public class MainActivity extends AppCompatActivity implements
     public void onRefresh(){
         RevizorService rs = RevizorService.getInstance();
         rs.getAll();
+
     }
 }

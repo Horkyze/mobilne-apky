@@ -3,6 +3,7 @@ package sk.stuba.fiit.revizori.service;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -12,6 +13,7 @@ import java.util.Date;
 
 import sk.stuba.fiit.revizori.Revizori;
 import sk.stuba.fiit.revizori.VolleySingleton;
+import sk.stuba.fiit.revizori.backendless.BackendlessCoreRequest;
 import sk.stuba.fiit.revizori.backendless.BackendlessRequest;
 import sk.stuba.fiit.revizori.model.Revizor;
 
@@ -25,7 +27,31 @@ public class RevizorService {
     }
 
     String url = "/revizor";
+
+    public ArrayList<Revizor> getRevizori() {
+        return revizori;
+    }
+
     ArrayList<Revizor> revizori = new ArrayList<>();
+
+    public void createRevizor(Revizor r){
+        BackendlessRequest br = new BackendlessRequest(Request.Method.POST, url, new Response.Listener<String>() {
+            @Override
+            public void onResponse(String response) {
+
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+
+            }
+        });
+        BackendlessCoreRequest request = br.getRequest();
+        request.setBody(r.getPOSTjson());
+        System.out.println(r.getPOSTjson());
+        VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(request);
+
+    }
 
     public void getAll(){
         BackendlessRequest br = new BackendlessRequest(Request.Method.GET, url,
@@ -58,6 +84,7 @@ public class RevizorService {
                         } finally {
                             // stop refreshing (spinning icon)
                             // how ??
+
                         }
                     }
                 }, new Response.ErrorListener() {

@@ -7,7 +7,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context=".CreatePostActivity">
+    tools:context=".CreateRevizorActivity">
 
     <EditText
         android:layout_width="wrap_content"
@@ -15,7 +15,7 @@
         android:inputType="textPersonName"
         android:text="Name"
         android:ems="10"
-        android:id="@+id/lineNumber"
+        android:id="@+id/line_number"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -25,9 +25,9 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/comment"
-        android:layout_below="@+id/lineNumber"
-        android:layout_alignLeft="@+id/lineNumber"
-        android:layout_alignStart="@+id/lineNumber"
+        android:layout_below="@+id/line_number"
+        android:layout_alignLeft="@+id/line_number"
+        android:layout_alignStart="@+id/line_number"
         android:layout_marginTop="84dp" />
 
     <Button
@@ -35,9 +35,10 @@
         android:layout_height="wrap_content"
         android:text="Pridat"
         android:id="@+id/createPost"
-        android:layout_centerVertical="true"
+        android:layout_below="@+id/comment"
         android:layout_alignLeft="@+id/comment"
         android:layout_alignStart="@+id/comment"
+        android:layout_marginTop="116dp"
         android:onClick="onCreatePostClick" />
 
 </RelativeLayout>
