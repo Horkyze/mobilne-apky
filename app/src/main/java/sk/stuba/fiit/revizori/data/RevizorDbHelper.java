@@ -61,7 +61,7 @@ public class RevizorDbHelper extends SQLiteOpenHelper {
 
                 // To assure the application have just one weather entry per day
                 // per location, it's created a UNIQUE constraint with REPLACE strategy
-                " UNIQUE (" + RevizorContract.RevizorEntry.COLUMN_OBJECT_ID  + ") ON CONFLICT ABORT);";
+                " UNIQUE (" + RevizorContract.RevizorEntry.COLUMN_OBJECT_ID  + ") ON CONFLICT REPLACE);";
 
         sqLiteDatabase.execSQL(SQL_CREATE_REVIZOR_TABLE);
     }

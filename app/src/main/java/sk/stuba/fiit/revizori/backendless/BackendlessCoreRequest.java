@@ -18,7 +18,7 @@ public class BackendlessCoreRequest extends StringRequest {
     private Map<String, String> params;
     private byte [] body;
 
-    private String url = "https://api.backendless.com/v1/data";
+    private String url = "http://api.backendless.com/v1/data";
     private String appId = "FAE4BDAB-E4A4-654C-FFFA-A005AD5E5D00";
     private String secret = "B2C47E23-06D1-5232-FF77-07E29B78AA00";
 

@@ -85,6 +85,7 @@ public class RevizorProvider extends ContentProvider {
         return matcher;
     }
 
+
     /*
         Students: We've coded this for you.  We just create a new RevizorDbHelper for later use
         here.
@@ -105,7 +106,6 @@ public class RevizorProvider extends ContentProvider {
 
         // Use the Uri Matcher to determine what kind of URI this is.
         final int match = sUriMatcher.match(uri);
-
         switch (match) {
             case REVIZOR:
                 return RevizorContract.RevizorEntry.CONTENT_TYPE;
@@ -178,10 +178,16 @@ public class RevizorProvider extends ContentProvider {
         final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         final int match = sUriMatcher.match(uri);
         int rowsDeleted;
-        // this makes delete all rows return the number of rows deleted
-        if ( null == selection ) selection = "1";
+
+//        // this makes delete all rows return the number of rows deleted
+//        if ( null == selection ) selection = "1";
+
         switch (match) {
             case REVIZOR:
+                rowsDeleted = db.delete(
+                        RevizorContract.RevizorEntry.TABLE_NAME, selection, selectionArgs);
+                break;
+            case REVIZOR_WITH_ID:
                 rowsDeleted = db.delete(
                         RevizorContract.RevizorEntry.TABLE_NAME, selection, selectionArgs);
                 break;
