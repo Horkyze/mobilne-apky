@@ -15,6 +15,7 @@ import android.util.Log;
 
 import sk.stuba.fiit.revizori.R;
 import sk.stuba.fiit.revizori.Revizori;
+import sk.stuba.fiit.revizori.data.RevizorContract;
 import sk.stuba.fiit.revizori.service.RevizorService;
 
 /**
@@ -60,8 +61,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
     @Override
     public void onPerformSync(Account account, Bundle extras, String authority, ContentProviderClient provider, SyncResult syncResult) {
         Log.d("sync","preform sync");
+        // delete all?
+        getContext().getContentResolver().delete(RevizorContract.RevizorEntry.CONTENT_URI, null, null);
+
         RevizorService rs = RevizorService.getInstance();
         rs.getAll();
+
     }
 
     /**

@@ -8,6 +8,8 @@ import android.util.Log;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.Volley;
 import com.google.gson.Gson;
 
 import org.json.JSONArray;
@@ -50,12 +52,13 @@ public class RevizorService {
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                //Log.e("Volley", error.getMessage());
+                error.printStackTrace();
 
             }
         });
         BackendlessCoreRequest request = br.getRequest();
         request.setBody(r.getPOSTjson());
-        System.out.println(r.getPOSTjson());
         VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(request);
 
     }

@@ -12,10 +12,10 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="text"
         android:text="Name"
         android:ems="10"
-        android:id="@+id/line_number"
+        android:id="@+id/add_line_number"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -25,20 +25,19 @@
         android:inputType="textMultiLine"
         android:ems="10"
         android:id="@+id/comment"
-        android:layout_below="@+id/line_number"
-        android:layout_alignLeft="@+id/line_number"
-        android:layout_alignStart="@+id/line_number"
+        android:layout_below="@+id/add_line_number"
+        android:layout_alignLeft="@+id/add_line_number"
+        android:layout_alignStart="@+id/add_line_number"
         android:layout_marginTop="84dp" />
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Pridat"
-        android:id="@+id/createPost"
+        android:id="@+id/createPostBtn"
+        android:layout_marginTop="112dp"
+        android:onClick=""
         android:layout_below="@+id/comment"
-        android:layout_alignLeft="@+id/comment"
-        android:layout_alignStart="@+id/comment"
-        android:layout_marginTop="116dp"
-        android:onClick="onCreatePostClick" />
+        android:layout_centerHorizontal="true" />
 
 </RelativeLayout>

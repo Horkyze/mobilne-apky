@@ -4,6 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Revizor extends ModelBase {
     private String line_number;
     private double latitude;
@@ -28,17 +31,22 @@ public class Revizor extends ModelBase {
     }
 
     public String getPOSTjson(){
-        Gson gson = new Gson();
-        gson.toJson(this);
-        JsonObject jo = new JsonObject();
-        jo.addProperty("line_number", this.line_number);
-        jo.addProperty("latitude", this.latitude);
-        jo.addProperty("longitude", this.longitude);
-        jo.addProperty("photo_url", this.photo_url);
-        jo.addProperty("comment", this.comment);
-        jo.addProperty("___class", "revizor");
-        jo.addProperty("__meta", "{\"relationRemovalIds\":{},\"selectedProperties\":[\"line_number\",\"created\",\"___saved\",\"latitude\",\"___class\",\"comment\",\"photo_url\",\"ownerId\",\"updated\",\"objectId\",\"longitude\"],\"relatedObjects\":{}}");
-        return jo.getAsString();
+
+        JSONObject jo = new JSONObject();
+        char QUOTE = '"';
+        String meta = "{"+QUOTE+"relationRemovalIds"+QUOTE+":{},"+QUOTE+"selectedProperties"+QUOTE+":["+QUOTE+"line_number"+QUOTE+","+QUOTE+"created"+QUOTE+","+QUOTE+"___saved"+QUOTE+","+QUOTE+"latitude"+QUOTE+","+QUOTE+"___class"+QUOTE+","+QUOTE+"comment"+QUOTE+","+QUOTE+"photo_url"+QUOTE+","+QUOTE+"ownerId"+QUOTE+","+QUOTE+"updated"+QUOTE+","+QUOTE+"objectId"+QUOTE+","+QUOTE+"longitude"+QUOTE+"],"+QUOTE+"relatedObjects"+QUOTE+":{}}";
+        try {
+            jo.put("line_number", this.line_number);
+            jo.put("latitude", this.latitude);
+            jo.put("longitude", this.longitude);
+            jo.put("photo_url", this.photo_url);
+            jo.put("comment", this.comment);
+            jo.put("___class", "revizor");
+            jo.put("__meta", meta);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jo.toString();
     }
 
     public String getLine_number() {
