@@ -64,8 +64,7 @@
             android:layout_width="0dp"
             android:layout_height="fill_parent"
             android:id="@+id/imageView2"
-            android:layout_weight="1"
-            android:src="http://icons.iconarchive.com/icons/iconka/tailwaggers/128/dog-einstein-icon.png" />
+            android:layout_weight="1"/>
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
