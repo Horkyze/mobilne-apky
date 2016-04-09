@@ -22,7 +22,7 @@ public class CreateRevizorActivity extends AppCompatActivity {
                 onCreatePostClick();
             }
         });
-
+        
     }
 
     public void onCreatePostClick(){

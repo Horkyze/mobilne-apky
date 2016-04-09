@@ -15,7 +15,6 @@
         android:layout_marginRight="6dip"
         android:text="@+id/line_number"
         android:singleLine="false"
-        android:phoneNumber="false"
         android:textColor="#e74c3c"
         android:textSize="@dimen/abc_text_size_display_2_material" />
 

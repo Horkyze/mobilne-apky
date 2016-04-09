@@ -20,8 +20,16 @@
         completions."
     </string>
     <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key">AIzaSyBv_r8QowCWKwg267d8cEOIou_5vOHzqfk</string>
 
     <!-- Sync -->
     <string name="sync_account_type">mockAccount.com</string>
     <string name="content_authority">sk.stuba.fiit.revizori</string>
+
+    <!-- Submission detail -->
+    <string name="detail_info_text">Naposledy videný</string>
+    <string name="comment_caption">Komentár:</string>
+
+
+
 </resources>
