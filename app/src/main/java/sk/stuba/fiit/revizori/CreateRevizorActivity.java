@@ -8,6 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -19,6 +21,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.Arrays;
+
 import sk.stuba.fiit.revizori.model.Revizor;
 import sk.stuba.fiit.revizori.service.RevizorService;
 
@@ -26,6 +30,8 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
 
     private GoogleMap mMap;
     private ImageView revizorPhoto;
+    private AutoCompleteTextView lineNumber;
+    private String[] lineNumbers;
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
@@ -34,6 +40,25 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
         setContentView(R.layout.activity_create_post);
 
         revizorPhoto = (ImageView) findViewById(R.id.revizorPhoto);
+
+        lineNumber = (AutoCompleteTextView ) findViewById(R.id.line_number);
+        lineNumbers = getResources().getStringArray(R.array.lines_numbers);
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lineNumbers);
+        lineNumber.setAdapter(adapter);
+
+        lineNumber.setValidator(new AutoCompleteTextView.Validator() {
+            @Override
+            public boolean isValid(CharSequence text){
+                return Arrays.asList(lineNumbers).contains(text.toString());
+            }
+
+            @Override
+            public CharSequence fixText(CharSequence invalidText) {
+                lineNumber.setError(getString(R.string.error_bad_line_number));
+                return invalidText;
+            }
+        });
 
         Button addBtn = (Button) findViewById(R.id.createPostBtn);
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -63,11 +88,20 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     }
 
     public void onCreatePostClick(){
-        TextView line = (TextView) findViewById(R.id.line_number);
-        TextView comment = (TextView) findViewById(R.id.comment);
-        Revizor r = new Revizor(line.getText().toString(), Math.random(), Math.random(), "photourl", comment.getText().toString());
-        RevizorService.getInstance().createRevizor(r);
+        boolean lineNumberExists = Arrays.asList(lineNumbers).contains(lineNumber.getText().toString());
 
+        if(lineNumberExists){
+            TextView comment = (TextView) findViewById(R.id.comment);
+            Revizor r = new Revizor(lineNumber.getText().toString(), Math.random(), Math.random(), "photourl", comment.getText().toString());
+            RevizorService.getInstance().createRevizor(r);
+            onBackPressed();
+        }
+        else{
+            if(lineNumber.getText().toString().equals("")){
+                lineNumber.setError(getString(R.string.error_field_required));
+            }
+            lineNumber.requestFocus();
+        }
     }
 
     public void onTakePhotoClick(){

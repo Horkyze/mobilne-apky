@@ -19,7 +19,7 @@
         android:layout_weight="1" >
 
 
-        <EditText
+        <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -32,7 +32,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Odfoť"
+            android:text="@string/take_photo_btn"
             android:id="@+id/takePhotoBtn"
             android:onClick=""
             android:layout_centerVertical="true"
@@ -73,7 +73,7 @@
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pridat"
+            android:text="@string/add_btn"
             android:id="@+id/createPostBtn"
             android:layout_alignParentBottom="true"
             android:onClick=""
