@@ -7,7 +7,7 @@
     android:weightSum="4"
     tools:context=".SubmissionDetailActivity">
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:name="com.google.android.gms.maps.MapFragment"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:id="@+id/map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -36,7 +36,7 @@
 
             <TextView
                 android:id="@+id/info"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/detail_info_text"
                 android:singleLine="true"
@@ -49,7 +49,7 @@
 
             <TextView
                 android:id="@+id/time_position"
-                android:layout_width="fill_parent"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="10:45 0.2 km od vás"
                 android:singleLine="true"
@@ -62,9 +62,11 @@
 
         <ImageView
             android:layout_width="0dp"
-            android:layout_height="fill_parent"
-            android:id="@+id/imageView2"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent"
+            android:id="@+id/revizor_photo"
+            android:layout_weight="1"
+            android:layout_margin="5dp"
+            android:scaleType="fitStart" />
     </LinearLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -82,7 +84,7 @@
 
         <TextView
             android:id="@+id/comment"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="blablabla"
             android:singleLine="true"

@@ -20,7 +20,6 @@
         completions."
     </string>
     <string name="title_activity_maps">Map</string>
-    <string name="google_maps_key">AIzaSyBv_r8QowCWKwg267d8cEOIou_5vOHzqfk</string>
 
     <!-- Sync -->
     <string name="sync_account_type">mockAccount.com</string>
@@ -30,6 +29,8 @@
     <string name="detail_info_text">Naposledy videný</string>
     <string name="comment_caption">Komentár:</string>
 
-
+    <!-- Create post -->
+    <string name="comment_hint">Komentár</string>
+    <string name="line_number_hint">Číslo linky</string>
 
 </resources>
