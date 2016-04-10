@@ -33,18 +33,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Odfoť"
-            android:id="@+id/takePhoto"
+            android:id="@+id/takePhotoBtn"
             android:onClick=""
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
 
         <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/revizor_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/revizorPhoto"
             android:layout_margin="5dp"
-            android:layout_toRightOf="@id/takePhoto"
-            android:scaleType="fitStart" />
+            android:layout_toRightOf="@id/takePhotoBtn"
+            android:scaleType="fitStart"
+            android:layout_centerVertical="true"/>
 
         <View
             android:id="@+id/separator"

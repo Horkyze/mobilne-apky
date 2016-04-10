@@ -1,11 +1,15 @@
 package sk.stuba.fiit.revizori;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,16 +25,29 @@ import sk.stuba.fiit.revizori.service.RevizorService;
 public class CreateRevizorActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private ImageView revizorPhoto;
+    static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
-        Button button = (Button) findViewById(R.id.createPostBtn);
-        button.setOnClickListener(new View.OnClickListener() {
+
+        revizorPhoto = (ImageView) findViewById(R.id.revizorPhoto);
+
+        Button addBtn = (Button) findViewById(R.id.createPostBtn);
+        addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onCreatePostClick();
+            }
+        });
+
+        Button takePhotoBtn = (Button) findViewById(R.id.takePhotoBtn);
+        takePhotoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onTakePhotoClick();
             }
         });
 
@@ -40,9 +57,9 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-       /* SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_p);
-        mapFragment.getMapAsync(this);*/
+        mapFragment.getMapAsync(this);
     }
 
     public void onCreatePostClick(){
@@ -51,6 +68,24 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
         Revizor r = new Revizor(line.getText().toString(), Math.random(), Math.random(), "photourl", comment.getText().toString());
         RevizorService.getInstance().createRevizor(r);
 
+    }
+
+    public void onTakePhotoClick(){
+
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            revizorPhoto.setImageBitmap(imageBitmap);
+            //upload code here
+        }
     }
 
     @Override
