@@ -1,8 +1,14 @@
 package sk.stuba.fiit.revizori;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationManager;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -19,7 +25,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.Arrays;
 
@@ -28,10 +33,16 @@ import sk.stuba.fiit.revizori.service.RevizorService;
 
 public class CreateRevizorActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    private GoogleMap mMap;
+    private GoogleMap map;
     private ImageView revizorPhoto;
     private AutoCompleteTextView lineNumber;
     private String[] lineNumbers;
+
+    //localization
+    LocationManager locationManager;
+    String provider;
+    LatLng myPosition;
+
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
@@ -41,15 +52,14 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
 
         revizorPhoto = (ImageView) findViewById(R.id.revizorPhoto);
 
-        lineNumber = (AutoCompleteTextView ) findViewById(R.id.line_number);
+        lineNumber = (AutoCompleteTextView) findViewById(R.id.line_number);
         lineNumbers = getResources().getStringArray(R.array.lines_numbers);
         ArrayAdapter<String> adapter =
                 new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, lineNumbers);
         lineNumber.setAdapter(adapter);
-
         lineNumber.setValidator(new AutoCompleteTextView.Validator() {
             @Override
-            public boolean isValid(CharSequence text){
+            public boolean isValid(CharSequence text) {
                 return Arrays.asList(lineNumbers).contains(text.toString());
             }
 
@@ -59,6 +69,8 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
                 return invalidText;
             }
         });
+
+
 
         Button addBtn = (Button) findViewById(R.id.createPostBtn);
         addBtn.setOnClickListener(new View.OnClickListener() {
@@ -87,24 +99,23 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
         mapFragment.getMapAsync(this);
     }
 
-    public void onCreatePostClick(){
+    public void onCreatePostClick() {
         boolean lineNumberExists = Arrays.asList(lineNumbers).contains(lineNumber.getText().toString());
 
-        if(lineNumberExists){
+        if (lineNumberExists) {
             TextView comment = (TextView) findViewById(R.id.comment);
             Revizor r = new Revizor(lineNumber.getText().toString(), Math.random(), Math.random(), "photourl", comment.getText().toString());
             RevizorService.getInstance().createRevizor(r);
             onBackPressed();
-        }
-        else{
-            if(lineNumber.getText().toString().equals("")){
+        } else {
+            if (lineNumber.getText().toString().equals("")) {
                 lineNumber.setError(getString(R.string.error_field_required));
             }
             lineNumber.requestFocus();
         }
     }
 
-    public void onTakePhotoClick(){
+    public void onTakePhotoClick() {
 
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -135,12 +146,32 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        mMap = googleMap;
+        map = googleMap;
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            map.setMyLocationEnabled(true);
+        }
+            map.setOnMyLocationButtonClickListener(new GoogleMap.OnMyLocationButtonClickListener() {
+                @Override
+                public boolean onMyLocationButtonClick() {
+                    getMyPosition();
+                    return true;
+                }
+            });
 
-        // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        provider = locationManager.getBestProvider(new Criteria(), true);
+        getMyPosition();
     }
 
+    void getMyPosition(){
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
+            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            Location location = locationManager.getLastKnownLocation(provider);
+            myPosition = new LatLng(location.getLatitude(), location.getLongitude());
+            //mMap.addMarker(new MarkerOptions().position(myPosition));
+            map.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
+            map.animateCamera(CameraUpdateFactory.zoomTo(15));
+        }
+    }
 }
