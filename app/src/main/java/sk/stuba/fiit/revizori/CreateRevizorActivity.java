@@ -4,10 +4,14 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -26,22 +30,35 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
+import sk.stuba.fiit.revizori.imgur.Constants;
+import sk.stuba.fiit.revizori.imgur.UploadService;
+import sk.stuba.fiit.revizori.imgur.model.ImageResponse;
+import sk.stuba.fiit.revizori.imgur.model.Upload;
 import sk.stuba.fiit.revizori.model.Revizor;
 import sk.stuba.fiit.revizori.service.RevizorService;
 
 public class CreateRevizorActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap map;
-    private ImageView revizorPhoto;
     private AutoCompleteTextView lineNumber;
     private String[] lineNumbers;
-
+    static final String PHOTO_PATH = "photoPath";
+    private String photoPath;
+    private ImageView revizorPhoto;
+    private String uploadedPhotoUrl;
     //localization
-    LocationManager locationManager;
-    String provider;
-    LatLng myPosition;
+    private LocationManager locationManager;
+    private String provider;
+    private LatLng myPosition;
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -49,6 +66,11 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_post);
+
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            photoPath = savedInstanceState.getString(PHOTO_PATH);
+        }
 
         revizorPhoto = (ImageView) findViewById(R.id.revizorPhoto);
 
@@ -116,20 +138,96 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     }
 
     public void onTakePhotoClick() {
-
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+               // ...
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+                        Uri.fromFile(photoFile));
+                startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+            }
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            revizorPhoto.setImageBitmap(imageBitmap);
-            //upload code here
+            uploadPhoto();
+            setPic();
+        }
+    }
+
+    private void setPic() {
+        // Get the dimensions of the View
+
+        int targetW = (int) getResources().getDimension(R.dimen.photo_thumbnail_width);
+        int targetH = (int) getResources().getDimension(R.dimen.photo_thumbnail_height);
+
+        // Get the dimensions of the bitmap
+        BitmapFactory.Options bmOptions = new BitmapFactory.Options();
+        bmOptions.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoPath, bmOptions);
+        int photoW = bmOptions.outWidth;
+        int photoH = bmOptions.outHeight;
+
+        // Determine how much to scale down the image
+        int scaleFactor = Math.min(photoW/targetW, photoH/targetH);
+
+        // Decode the image file into a Bitmap sized to fill the View
+        bmOptions.inJustDecodeBounds = false;
+        bmOptions.inSampleSize = scaleFactor;
+        bmOptions.inPurgeable = true;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
+        revizorPhoto.setImageBitmap(bitmap);
+    }
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = Environment.getExternalStoragePublicDirectory(
+                Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        photoPath = image.getAbsolutePath();
+        return image;
+    }
+    private void uploadPhoto(){
+        Upload upload = new Upload();
+        System.out.println(photoPath);
+        upload.image = new File(photoPath);
+        //upload.albumId = Constants.ALBUM_ID;
+        new UploadService(this).Execute(upload, new UiCallback());
+    }
+
+    private class UiCallback implements Callback<ImageResponse> {
+
+        @Override
+        public void success(ImageResponse imageResponse, Response response) {
+            uploadedPhotoUrl = imageResponse.data.link;
+        }
+
+        @Override
+        public void failure(RetrofitError error) {
+            //Assume we have no connection, since error is null
+            if (error == null) {
+                Snackbar.make(findViewById(R.id.create_post_view), "No internet connection", Snackbar.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -173,5 +271,14 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
             map.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
             map.animateCamera(CameraUpdateFactory.zoomTo(15));
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putString(PHOTO_PATH, photoPath);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 }

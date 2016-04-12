@@ -16,8 +16,8 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
+    <string name="permission_rationale">Contacts permissions are needed for providing email
+        completions.
     </string>
     <string name="title_activity_maps">Map</string>
 
@@ -36,6 +36,11 @@
     <string name="add_btn">Pridať</string>
     <string name="error_bad_line_number">Taká linka neexistuje</string>
 
+    <!-- imgur -->
+    <string name="notification_progress">Uploading image...</string>
+    <string name="notifaction_success">Successfully uploaded</string>
+    <string name="notification_fail">Image failed to upload...</string>
+    <string name="notification_share_link">Share link</string>
 
     <string-array name="lines_numbers">
         <item>1</item>
