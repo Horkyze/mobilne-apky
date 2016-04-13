@@ -81,6 +81,7 @@
         </activity>
         <activity android:name=".CreateRevizorActivity" />
         <activity android:name=".SubmissionDetailActivity" />
+        <activity android:name=".PhotoDetail" />
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.

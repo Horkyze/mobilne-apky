@@ -167,7 +167,6 @@ public class MainActivity extends AppCompatActivity implements
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("cau");
                 Intent intent = new Intent(MainActivity.this, SubmissionDetailActivity.class);
                 //ListEntry entry = (ListEntry) parent.getItemAtPosition(position);
                 //String message = "abc";
@@ -179,7 +178,6 @@ public class MainActivity extends AppCompatActivity implements
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, final long id) {
-                System.out.println("cau");
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

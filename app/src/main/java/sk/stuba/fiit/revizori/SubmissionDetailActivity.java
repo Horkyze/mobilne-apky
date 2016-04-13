@@ -1,9 +1,11 @@
 package sk.stuba.fiit.revizori;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -36,6 +38,17 @@ public class SubmissionDetailActivity extends AppCompatActivity implements OnMap
         ImageView revizorPhoto = (ImageView) findViewById(R.id.revizor_photo);
 
         new ImageLoadTask("http://i.imgur.com/Si44mMq.jpg", revizorPhoto).execute();
+
+        revizorPhoto.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v)
+            {
+                Intent intent = new Intent(SubmissionDetailActivity.this, PhotoDetail.class);
+                String photoUrl = "http://i.imgur.com/Si44mMq.jpg";
+                intent.putExtra("photo_url", photoUrl);
+                startActivity(intent);
+            }
+
+        });
     }
 
     @Override
