@@ -10,7 +10,7 @@
     tools:context=".CreateRevizorActivity">
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/map_p"
+        android:id="@+id/my_possition_map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"/>

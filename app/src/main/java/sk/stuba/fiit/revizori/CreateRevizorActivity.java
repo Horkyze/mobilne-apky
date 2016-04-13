@@ -59,7 +59,7 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     private String provider;
     private LatLng myPosition;
 
-    static final int REQUEST_IMAGE_CAPTURE = 1;
+    final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,7 +116,7 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
         }
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map_p);
+                .findFragmentById(R.id.my_possition_map);
         mapFragment.getMapAsync(this);
     }
 

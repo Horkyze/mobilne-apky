@@ -36,6 +36,10 @@
     <string name="add_btn">Pridať</string>
     <string name="error_bad_line_number">Taká linka neexistuje</string>
 
+    <!-- Edit post -->
+    <string name="take_photo_again_btn">Odfoť znova</string>
+    <string name="edit_btn">Upraviť</string>
+
     <!-- imgur -->
     <string name="notification_progress">Uploading image...</string>
     <string name="notifaction_success">Successfully uploaded</string>

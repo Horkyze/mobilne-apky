@@ -26,7 +26,7 @@ public class SubmissionDetailActivity extends AppCompatActivity implements OnMap
 
         setContentView(R.layout.submission_detail);
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.map);
+                .findFragmentById(R.id.submission_position_map);
         mapFragment.getMapAsync(this);
 
         ActionBar actionBar = getSupportActionBar();
