@@ -35,6 +35,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import retrofit.Callback;
 import retrofit.RetrofitError;
@@ -244,6 +245,10 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+        provider = locationManager.getBestProvider(new Criteria(), true);
+
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
@@ -256,8 +261,6 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
                 }
             });
 
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        provider = locationManager.getBestProvider(new Criteria(), true);
         getMyPosition();
     }
 
