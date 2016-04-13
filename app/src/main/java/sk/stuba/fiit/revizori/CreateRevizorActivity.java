@@ -39,7 +39,6 @@ import java.util.Date;
 import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
-import sk.stuba.fiit.revizori.imgur.Constants;
 import sk.stuba.fiit.revizori.imgur.UploadService;
 import sk.stuba.fiit.revizori.imgur.model.ImageResponse;
 import sk.stuba.fiit.revizori.imgur.model.Upload;
@@ -53,7 +52,7 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     private String[] lineNumbers;
     static final String PHOTO_PATH = "photoPath";
     private String photoPath;
-    private ImageView revizorPhoto;
+    private ImageView newRevizorPhoto;
     private String uploadedPhotoUrl;
     //localization
     private LocationManager locationManager;
@@ -72,7 +71,7 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
             photoPath = savedInstanceState.getString(PHOTO_PATH);
         }
 
-        revizorPhoto = (ImageView) findViewById(R.id.revizorPhoto);
+        newRevizorPhoto = (ImageView) findViewById(R.id.new_revizor_photo);
 
         lineNumber = (AutoCompleteTextView) findViewById(R.id.line_number);
         lineNumbers = getResources().getStringArray(R.array.lines_numbers);
@@ -188,7 +187,7 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
         bmOptions.inPurgeable = true;
 
         Bitmap bitmap = BitmapFactory.decodeFile(photoPath, bmOptions);
-        revizorPhoto.setImageBitmap(bitmap);
+        newRevizorPhoto.setImageBitmap(bitmap);
     }
 
     private File createImageFile() throws IOException {

@@ -2,7 +2,9 @@
     android:layout_width="fill_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:padding="6dip"
-    android:longClickable="true">
+    android:descendantFocusability="blocksDescendants"
+    android:focusable="false"
+    android:focusableInTouchMode="false">
 
 
     <TextView
@@ -24,7 +26,10 @@
         android:layout_width="2dp"
         android:layout_height="fill_parent"
         android:background="#c0c0c0"
-        android:layout_marginRight="6dp" />
+        android:layout_marginRight="6dp"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
 
     <TextView
@@ -37,7 +42,10 @@
         android:ellipsize="marquee"
         android:singleLine="true"
         android:text="0,2 km od vás"
-        android:textSize="12sp" />
+        android:textSize="12sp"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
     <TextView
         android:id="@+id/time"
@@ -50,7 +58,10 @@
         android:layout_toRightOf="@id/separator"
         android:gravity="center_vertical"
         android:text="10:45"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:clickable="false"
+        android:focusable="false"
+        android:focusableInTouchMode="false"/>
 
 
 </RelativeLayout> 

@@ -164,15 +164,27 @@ public class MainActivity extends AppCompatActivity implements
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(revizorCursorAdapter);
 
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                System.out.println("cau");
+                Intent intent = new Intent(MainActivity.this, SubmissionDetailActivity.class);
+                //ListEntry entry = (ListEntry) parent.getItemAtPosition(position);
+                //String message = "abc";
+                //intent.putExtra(EXTRA_MESSAGE, message);
+                startActivity(intent);
+            }
+        });
 
         listview.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, final long id) {
-
+                System.out.println("cau");
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        switch (which){
+
+                        switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
                                 getContentResolver().delete(RevizorContract.RevizorEntry.buildRevizorUri(id), "_id = " + id, null);
@@ -187,11 +199,11 @@ public class MainActivity extends AppCompatActivity implements
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(listview.getContext());
                 builder.setCancelable(true);
-                builder.setMessage("Delete where _id = "+listview.getItemIdAtPosition(pos)+"?").setPositiveButton("Yes", dialogClickListener)
+                builder.setMessage("Delete where _id = " + listview.getItemIdAtPosition(pos) + "?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
 
 
-                Log.v("long clicked","pos: " + pos + "  id: " + listview.getItemIdAtPosition(pos));
+                Log.v("long clicked", "pos: " + pos + "  id: " + listview.getItemIdAtPosition(pos));
 
                 return true;
             }
