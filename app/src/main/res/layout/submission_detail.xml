@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="4"
+    tools:context=".SubmissionDetailActivity">
+
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/submission_position_map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/line_number"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:singleLine="true"
+            android:text="139"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#e74c3c"
+            android:textSize="45sp" />
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/line_number"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:singleLine="true"
+            android:text="@string/detail_info_text"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/time_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/info"
+            android:layout_marginLeft="10dp"
+            android:singleLine="true"
+            android:text="10:45 0.2 km od vás"
+            android:textSize="18sp" />
+
+        <ImageView
+            android:id="@+id/revizor_photo"
+            android:layout_width="@dimen/photo_thumbnail_width"
+            android:layout_height="@dimen/photo_thumbnail_height"
+            android:layout_alignParentEnd="true"
+            android:layout_marginLeft="15dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:clickable="true" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/comment_caption"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="10dp"
+            android:singleLine="true"
+            android:text="@string/comment_caption"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/comment_caption"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:singleLine="true"
+            android:text="blablabla"
+            android:textSize="16sp" />
+    </RelativeLayout>
+</LinearLayout>

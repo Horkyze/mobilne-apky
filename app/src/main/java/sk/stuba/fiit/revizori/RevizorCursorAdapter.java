@@ -26,7 +26,7 @@ public class RevizorCursorAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
         // Find fields to populate in inflated template
-        TextView lineNumber = (TextView) view.findViewById(R.id.lineNumber);
+        TextView lineNumber = (TextView) view.findViewById(R.id.row_line_number);
         TextView distance = (TextView) view.findViewById(R.id.distance);
         TextView time = (TextView) view.findViewById(R.id.time);
 

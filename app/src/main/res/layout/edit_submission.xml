@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/create_post_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:paddingBottom="10dp"
     android:orientation="vertical"
     android:weightSum="4"
-    tools:context=".CreateRevizorActivity">
+    tools:context=".EditSubmissionActivity">
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/my_possition_map"
+        android:id="@+id/edit_submission_position_map"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="2"/>
@@ -20,21 +19,23 @@
         android:layout_weight="1" >
 
 
-        <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        <TextView
+            android:id="@+id/line_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="text"
-            android:hint="@string/line_number_hint"
-            android:ems="5"
-            android:id="@+id/line_number"
             android:layout_marginLeft="10dp"
-            android:layout_centerVertical="true" />
+            android:layout_marginTop="10dp"
+            android:singleLine="true"
+            android:text="139"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:textColor="#e74c3c"
+            android:textSize="45sp" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/take_photo_btn"
-            android:id="@+id/takePhotoBtn"
+            android:text="@string/take_photo_again_btn"
+            android:id="@+id/takePhotoAgainBtn"
             android:onClick=""
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"/>
@@ -42,9 +43,9 @@
         <ImageView
             android:layout_width="@dimen/photo_thumbnail_width"
             android:layout_height="@dimen/photo_thumbnail_height"
-            android:id="@+id/new_revizor_photo"
+            android:id="@+id/edit_new_revizor_photo"
             android:layout_margin="5dp"
-            android:layout_toRightOf="@id/takePhotoBtn"
+            android:layout_toRightOf="@id/takePhotoAgainBtn"
             android:scaleType="fitStart"
             android:layout_centerVertical="true"
             android:layout_centerHorizontal="true" />
@@ -70,13 +71,13 @@
             android:layout_marginRight="10dp"
             android:layout_centerHorizontal="true"
             android:hint="@string/comment_hint"
-            android:layout_above="@+id/createPostBtn" />
+            android:layout_above="@+id/editPostBtn" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/add_btn"
-            android:id="@+id/createPostBtn"
+            android:text="@string/edit_btn"
+            android:id="@+id/editPostBtn"
             android:layout_alignParentBottom="true"
             android:onClick=""
             android:layout_centerHorizontal="true"

@@ -16,12 +16,153 @@
     <string name="error_invalid_password">This password is too short</string>
     <string name="error_incorrect_password">This password is incorrect</string>
     <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
+    <string name="permission_rationale">Contacts permissions are needed for providing email
+        completions.
     </string>
     <string name="title_activity_maps">Map</string>
+
+    <string name="search_hint">Číslo linky</string>
+
+
     <!-- Sync -->
     <string name="sync_account_type">mockAccount.com</string>
     <string name="content_authority">sk.stuba.fiit.revizori</string>
-    <string name="search_hint">Číslo linky</string>
+
+    <!-- Submission detail -->
+    <string name="detail_info_text">Naposledy videný</string>
+    <string name="comment_caption">Komentár:</string>
+
+    <!-- Create post -->
+    <string name="comment_hint">Komentár</string>
+    <string name="line_number_hint">Číslo linky</string>
+    <string name="take_photo_btn">Odfoť</string>
+    <string name="add_btn">Pridať</string>
+    <string name="error_bad_line_number">Taká linka neexistuje</string>
+
+    <!-- Edit post -->
+    <string name="take_photo_again_btn">Odfoť znova</string>
+    <string name="edit_btn">Upraviť</string>
+
+    <!-- imgur -->
+    <string name="notification_progress">Uploading image...</string>
+    <string name="notifaction_success">Successfully uploaded</string>
+    <string name="notification_fail">Image failed to upload...</string>
+    <string name="notification_share_link">Share link</string>
+
+    <string-array name="lines_numbers">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>8</item>
+        <item>9</item>
+        <item>33</item>
+        <item>64</item>
+        <item>201</item>
+        <item>202</item>
+        <item>203</item>
+        <item>204</item>
+        <item>205</item>
+        <item>206</item>
+        <item>207</item>
+        <item>208</item>
+        <item>209</item>
+        <item>210</item>
+        <item>211</item>
+        <item>212</item>
+        <item>20</item>
+        <item>21</item>
+        <item>23</item>
+        <item>24</item>
+        <item>25</item>
+        <item>26</item>
+        <item>27</item>
+        <item>28</item>
+        <item>29</item>
+        <item>30</item>
+        <item>31</item>
+        <item>32</item>
+        <item>35</item>
+        <item>37</item>
+        <item>39</item>
+        <item>41</item>
+        <item>43</item>
+        <item>44</item>
+        <item>50</item>
+        <item>51</item>
+        <item>52</item>
+        <item>53</item>
+        <item>54</item>
+        <item>56</item>
+        <item>57</item>
+        <item>58</item>
+        <item>59</item>
+        <item>61</item>
+        <item>63</item>
+        <item>65</item>
+        <item>66</item>
+        <item>67</item>
+        <item>68</item>
+        <item>69</item>
+        <item>70</item>
+        <item>74</item>
+        <item>75</item>
+        <item>77</item>
+        <item>78</item>
+        <item>79</item>
+        <item>80</item>
+        <item>82</item>
+        <item>83</item>
+        <item>84</item>
+        <item>87</item>
+        <item>88</item>
+        <item>90</item>
+        <item>91</item>
+        <item>92</item>
+        <item>93</item>
+        <item>94</item>
+        <item>95</item>
+        <item>96</item>
+        <item>98</item>
+        <item>99</item>
+        <item>123</item>
+        <item>130</item>
+        <item>131</item>
+        <item>133</item>
+        <item>139</item>
+        <item>141</item>
+        <item>147</item>
+        <item>151</item>
+        <item>153</item>
+        <item>184</item>
+        <item>191</item>
+        <item>192</item>
+        <item>196</item>
+        <item>X13</item>
+        <item>525</item>
+        <item>801</item>
+        <item>901</item>
+        <item>N21</item>
+        <item>N29</item>
+        <item>N31</item>
+        <item>N33</item>
+        <item>N34</item>
+        <item>N37</item>
+        <item>N44</item>
+        <item>N47</item>
+        <item>N53</item>
+        <item>N55</item>
+        <item>N56</item>
+        <item>N61</item>
+        <item>N70</item>
+        <item>N72</item>
+        <item>N74</item>
+        <item>N80</item>
+        <item>N91</item>
+        <item>N93</item>
+        <item>N95</item>
+        <item>N99</item>
+    </string-array>
 </resources>
