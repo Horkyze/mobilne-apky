@@ -20,6 +20,8 @@
         completions."
     </string>
     <string name="title_activity_maps">Map</string>
-
+    <!-- Sync -->
+    <string name="sync_account_type">mockAccount.com</string>
+    <string name="content_authority">sk.stuba.fiit.revizori</string>
     <string name="search_hint">Číslo linky</string>
 </resources>
