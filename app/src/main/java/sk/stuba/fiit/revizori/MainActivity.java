@@ -168,9 +168,15 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, SubmissionDetailActivity.class);
-                //ListEntry entry = (ListEntry) parent.getItemAtPosition(position);
-                //String message = "abc";
-                //intent.putExtra(EXTRA_MESSAGE, message);
+                Cursor cur = (Cursor) revizorCursorAdapter.getItem(position);
+                cur.moveToPosition(position);
+                intent.putExtra("lineNumber", revizorCursorAdapter.getLineNumber(cur));
+                intent.putExtra("time", revizorCursorAdapter.getTime(cur));
+                intent.putExtra("distance", revizorCursorAdapter.getDistance(cur));
+                intent.putExtra("latitude", revizorCursorAdapter.getLatitude(cur));
+                intent.putExtra("longitude", revizorCursorAdapter.getLongitude(cur));
+                intent.putExtra("comment", revizorCursorAdapter.getComment(cur));
+                intent.putExtra("photoUrl", revizorCursorAdapter.getPhotoUrl(cur));
                 startActivity(intent);
             }
         });

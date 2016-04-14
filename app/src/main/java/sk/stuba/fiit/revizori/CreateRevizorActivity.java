@@ -58,7 +58,6 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     private String uploadedPhotoUrl;
     private LatLng myPosition;
 
-
     final int REQUEST_IMAGE_CAPTURE = 1;
 
     @Override

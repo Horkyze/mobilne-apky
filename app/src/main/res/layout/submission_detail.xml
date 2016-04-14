@@ -20,13 +20,13 @@
         android:layout_weight="1">
 
         <TextView
-            android:id="@+id/line_number"
+            android:id="@+id/line_number_detail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="10dp"
             android:singleLine="true"
-            android:text="139"
+            android:text="39"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:textColor="#e74c3c"
             android:textSize="45sp" />
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/line_number"
+            android:layout_below="@+id/line_number_detail"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="5dp"
             android:singleLine="true"

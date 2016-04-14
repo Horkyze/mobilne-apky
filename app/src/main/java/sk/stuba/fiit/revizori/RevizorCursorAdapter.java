@@ -46,13 +46,10 @@ public class RevizorCursorAdapter extends CursorAdapter {
         );
 
         long unixSeconds = cursor.getLong(
-                            cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_CREATED)
-                            );
-        Date date = new Date(unixSeconds);
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
-        String formattedDate = sdf.format(date);
-        time.setText(formattedDate);
+                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_CREATED)
+        );
+
+        time.setText(unixTimeToDate(unixSeconds));
 
         double latitude = cursor.getDouble(
                 cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_LATITUDE)
@@ -85,4 +82,62 @@ public class RevizorCursorAdapter extends CursorAdapter {
         Location myLocation = ls.getBestLocation();
         return myLocation;
     }
+
+    private String unixTimeToDate(long unixSeconds){
+        Date date = new Date(unixSeconds);
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
+        String formattedDate = sdf.format(date);
+        return formattedDate;
+    }
+
+    public String getDistance(Cursor cursor){
+        double latitude = cursor.getDouble(
+                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_LATITUDE)
+        );
+        double longitude = cursor.getDouble(
+                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_LONGITUDE)
+        );
+        return (computeDistance(latitude, longitude) + " od vás");
+    }
+
+    public String getPhotoUrl(Cursor cursor){
+        return cursor.getString(
+                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_PHOTO_URL)
+        );
+    }
+
+    public String getLineNumber(Cursor cursor){
+        return cursor.getString(
+                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_LINE_NUMBER)
+        );
+    }
+
+    public String getTime(Cursor cursor){
+        long unixSeconds = cursor.getLong(
+                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_CREATED)
+        );
+        return (unixTimeToDate(unixSeconds));
+    }
+
+    public double getLongitude(Cursor cursor){
+        return cursor.getDouble(
+                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_LONGITUDE)
+        );
+    }
+
+    public double getLatitude(Cursor cursor){
+        return cursor.getDouble(
+                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_LATITUDE)
+        );
+    }
+
+    public String getComment(Cursor cursor){
+        return cursor.getString(
+                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_COMMENT)
+        );
+    }
+
+
+
 }
