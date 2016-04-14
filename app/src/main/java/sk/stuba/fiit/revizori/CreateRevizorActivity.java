@@ -44,6 +44,7 @@ import sk.stuba.fiit.revizori.imgur.UploadService;
 import sk.stuba.fiit.revizori.imgur.model.ImageResponse;
 import sk.stuba.fiit.revizori.imgur.model.Upload;
 import sk.stuba.fiit.revizori.model.Revizor;
+import sk.stuba.fiit.revizori.service.LocationService;
 import sk.stuba.fiit.revizori.service.RevizorService;
 
 public class CreateRevizorActivity extends AppCompatActivity implements OnMapReadyCallback {
@@ -55,10 +56,7 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     private String photoPath;
     private ImageView newRevizorPhoto;
     private String uploadedPhotoUrl;
-    //localization
-    private LocationManager locationManager;
-    private String provider;
-    private LatLng myPosition;
+
 
     final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -245,10 +243,6 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     @Override
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
-
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-        provider = locationManager.getBestProvider(new Criteria(), true);
-
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
             ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
@@ -264,11 +258,11 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
         getMyPosition();
     }
 
-    void getMyPosition(){
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED ||
-            ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-            Location location = locationManager.getLastKnownLocation(provider);
-            myPosition = new LatLng(location.getLatitude(), location.getLongitude());
+    private void getMyPosition(){
+        LocationService ls = LocationService.getInstance();
+        Location bestLocation = ls.getBestLocation();
+        if(bestLocation != null){
+            LatLng myPosition = new LatLng(bestLocation.getLatitude(), bestLocation.getLongitude());
             //mMap.addMarker(new MarkerOptions().position(myPosition));
             map.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
             map.animateCamera(CameraUpdateFactory.zoomTo(15));
