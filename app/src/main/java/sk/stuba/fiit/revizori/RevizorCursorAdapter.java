@@ -50,7 +50,7 @@ public class RevizorCursorAdapter extends CursorAdapter {
                             );
         Date date = new Date(unixSeconds);
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-        sdf.setTimeZone(TimeZone.getTimeZone("GMT+4"));
+        sdf.setTimeZone(TimeZone.getTimeZone("GMT+2"));
         String formattedDate = sdf.format(date);
         time.setText(formattedDate);
 
@@ -58,13 +58,13 @@ public class RevizorCursorAdapter extends CursorAdapter {
                 cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_LATITUDE)
         );
         double longitude = cursor.getDouble(
-                                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_LONGITUDE)
-                            );
+                cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_LONGITUDE)
+        );
 
-        distance.setText(computeDistance(latitude, longitude) + " km od vás");
+        distance.setText(computeDistance(latitude, longitude) + " od vás");
     }
 
-    private float computeDistance(double latitude, double longitude){
+    private String computeDistance(double latitude, double longitude){
         Location submissionLocation = new Location("submission");
         submissionLocation.setLatitude(latitude);
         submissionLocation.setLongitude(longitude);
@@ -72,8 +72,12 @@ public class RevizorCursorAdapter extends CursorAdapter {
         float distance = submissionLocation.distanceTo(myLocation);
         if(distance > 100){
             distance = (float)(Math.round(distance / 1000 * 10d) / 10d);
+            return distance + " km";
         }
-        return distance;
+        else{
+            distance = (float)(Math.round(distance * 10d) / 10d);
+            return distance + " m";
+        }
     }
 
     private Location getMyLocation(){

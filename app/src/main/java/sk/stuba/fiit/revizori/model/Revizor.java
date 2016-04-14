@@ -30,7 +30,7 @@ public class Revizor extends ModelBase {
         this.comment = "";
     }
 
-    public String getPOSTjson(){
+    public JSONObject getPOSTjson(){
 
         JSONObject jo = new JSONObject();
         char QUOTE = '"';
@@ -46,7 +46,7 @@ public class Revizor extends ModelBase {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return jo.toString();
+        return jo;
     }
 
     public String getLine_number() {

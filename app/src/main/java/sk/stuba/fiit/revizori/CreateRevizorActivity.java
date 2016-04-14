@@ -56,6 +56,7 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     private String photoPath;
     private ImageView newRevizorPhoto;
     private String uploadedPhotoUrl;
+    private LatLng myPosition;
 
 
     final int REQUEST_IMAGE_CAPTURE = 1;
@@ -90,8 +91,6 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
             }
         });
 
-
-
         Button addBtn = (Button) findViewById(R.id.createPostBtn);
         addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,7 +123,10 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
 
         if (lineNumberExists) {
             TextView comment = (TextView) findViewById(R.id.comment);
-            Revizor r = new Revizor(lineNumber.getText().toString(), Math.random(), Math.random(), "photourl", comment.getText().toString());
+            Revizor r = new Revizor(lineNumber.getText().toString(),
+                                    myPosition.latitude, myPosition.longitude,
+                                    uploadedPhotoUrl,
+                                    comment.getText().toString());
             RevizorService.getInstance().createRevizor(r);
             onBackPressed();
         } else {
@@ -262,7 +264,7 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
         LocationService ls = LocationService.getInstance();
         Location bestLocation = ls.getBestLocation();
         if(bestLocation != null){
-            LatLng myPosition = new LatLng(bestLocation.getLatitude(), bestLocation.getLongitude());
+            myPosition = new LatLng(bestLocation.getLatitude(), bestLocation.getLongitude());
             //mMap.addMarker(new MarkerOptions().position(myPosition));
             map.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
             map.animateCamera(CameraUpdateFactory.zoomTo(15));

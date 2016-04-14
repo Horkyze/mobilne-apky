@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.net.Uri;
 import android.util.Log;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -17,10 +18,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import sk.stuba.fiit.revizori.Revizori;
 import sk.stuba.fiit.revizori.VolleySingleton;
 import sk.stuba.fiit.revizori.backendless.BackendlessCoreRequest;
+import sk.stuba.fiit.revizori.backendless.BackendlessJsonRequest;
 import sk.stuba.fiit.revizori.backendless.BackendlessRequest;
 import sk.stuba.fiit.revizori.data.RevizorContract;
 import sk.stuba.fiit.revizori.data.RevizorProvider;
@@ -44,11 +48,12 @@ public class RevizorService {
     ArrayList<Revizor> revizori = new ArrayList<>();
 
     public void createRevizor(Revizor r){
-        BackendlessRequest br = new BackendlessRequest(Request.Method.POST, url, new Response.Listener<String>() {
+        BackendlessJsonRequest request = new BackendlessJsonRequest(url, r.getPOSTjson(), new Response.Listener<JSONObject>() {
             @Override
-            public void onResponse(String response) {
-                System.out.println(response);
+            public void onResponse(JSONObject response) {
+                System.out.println(response.toString());
             }
+
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
@@ -57,8 +62,6 @@ public class RevizorService {
 
             }
         });
-        BackendlessCoreRequest request = br.getRequest();
-        request.setBody(r.getPOSTjson());
         VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(request);
 
     }
