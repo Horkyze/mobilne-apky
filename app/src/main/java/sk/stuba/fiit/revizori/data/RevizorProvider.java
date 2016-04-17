@@ -53,7 +53,7 @@ public class RevizorProvider extends ContentProvider {
 
         return queryBuilder.query(mOpenHelper.getReadableDatabase(),
                 projection,
-                RevizorContract.RevizorEntry.COLUMN_OBJECT_ID + "=" + idFromUri,
+                "_id" + "=" + idFromUri,
                 null, // selectionArgs, wtf is this?
                 null,
                 null,

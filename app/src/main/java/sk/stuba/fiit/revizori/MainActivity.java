@@ -39,6 +39,7 @@ import sk.stuba.fiit.revizori.backendless.BackendlessRequest;
 import sk.stuba.fiit.revizori.data.RevizorContract;
 import sk.stuba.fiit.revizori.data.RevizorDbHelper;
 import sk.stuba.fiit.revizori.data.RevizorProvider;
+import sk.stuba.fiit.revizori.model.Revizor;
 import sk.stuba.fiit.revizori.service.RevizorService;
 import sk.stuba.fiit.revizori.sync.SyncAdapter;
 
@@ -169,6 +170,7 @@ public class MainActivity extends AppCompatActivity implements
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, SubmissionDetailActivity.class);
                 Cursor cur = (Cursor) revizorCursorAdapter.getItem(position);
+           
                 cur.moveToPosition(position);
                 intent.putExtra("lineNumber", revizorCursorAdapter.getLineNumber(cur));
                 intent.putExtra("time", revizorCursorAdapter.getTime(cur));
@@ -191,7 +193,9 @@ public class MainActivity extends AppCompatActivity implements
                         switch (which) {
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
-                                getContentResolver().delete(RevizorContract.RevizorEntry.buildRevizorUri(id), "_id = " + id, null);
+                                //getContentResolver().delete(RevizorContract.RevizorEntry.buildRevizorUri(id), "_id = " + id, null);
+                                RevizorService.getInstance().delete( (int) id );
+
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -203,9 +207,9 @@ public class MainActivity extends AppCompatActivity implements
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(listview.getContext());
                 builder.setCancelable(true);
+
                 builder.setMessage("Delete where _id = " + listview.getItemIdAtPosition(pos) + "?").setPositiveButton("Yes", dialogClickListener)
                         .setNegativeButton("No", dialogClickListener).show();
-
 
                 Log.v("long clicked", "pos: " + pos + "  id: " + listview.getItemIdAtPosition(pos));
 

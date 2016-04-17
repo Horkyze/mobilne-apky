@@ -39,8 +39,13 @@ public class BackendlessCoreRequest extends StringRequest {
         this.params = params;
     }
 
-    public void setBody(String body) {
-        this.body = body.getBytes();
+    public void setBody(byte [] body) {
+        this.body = body;
+    }
+
+    @Override
+    public byte[] getBody() throws AuthFailureError {
+        return this.body;
     }
 
     @Override
@@ -48,6 +53,7 @@ public class BackendlessCoreRequest extends StringRequest {
         Map params = new HashMap<String, String>();
         params.put("application-id", this.appId);
         params.put("secret-key", this.secret);
+        params.put("Content-Type", "application/json; charset=utf-8");
         return params;
     }
 
@@ -55,5 +61,4 @@ public class BackendlessCoreRequest extends StringRequest {
     protected Map<String, String> getParams() throws AuthFailureError {
         return super.getParams();
     }
-
 }
