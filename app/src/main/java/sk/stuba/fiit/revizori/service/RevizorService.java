@@ -3,7 +3,9 @@ package sk.stuba.fiit.revizori.service;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
+import android.support.design.widget.Snackbar;
 import android.util.Log;
 
 import com.alirezaafkar.json.requester.Requester;
@@ -35,6 +37,8 @@ import sk.stuba.fiit.revizori.backendless.BackendlessRequest;
 import sk.stuba.fiit.revizori.data.RevizorContract;
 import sk.stuba.fiit.revizori.data.RevizorProvider;
 import sk.stuba.fiit.revizori.model.Revizor;
+import sk.stuba.fiit.revizori.sync.SyncAdapter;
+import sk.stuba.fiit.revizori.sync.SyncService;
 
 
 public class RevizorService {
@@ -55,7 +59,7 @@ public class RevizorService {
     ArrayList<Revizor> revizori = new ArrayList<>();
 
     public void createRevizor(Revizor r){
-        BackendlessJsonRequest request = new BackendlessJsonRequest(Request.Method.PUT, url, r.getPOSTjson(), new Response.Listener<JSONObject>() {
+        BackendlessJsonRequest request = new BackendlessJsonRequest(Request.Method.PUT, Backendless.url, r.getPOSTjson(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 System.out.println(response.toString());
@@ -161,28 +165,19 @@ public class RevizorService {
             return;
         }
 
-//        BackendlessRequest backendlessRequest = new BackendlessRequest(Request.Method.DELETE, url, new Response.Listener<String>() {
-//            @Override
-//            public void onResponse(String response) {
-//                Log.d("delete ok", "");
-//            }
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                Log.d("delete failed ", "");
-//            }
-//        });
-//        backendlessRequest.getRequest().setBody(json.toString().getBytes());
 
-
-        BackendlessJsonRequest jsonRequest = new BackendlessJsonRequest(Request.Method.DELETE, Backendless.url, json, new Response.Listener<JSONObject>() {
+        BackendlessJsonRequest jsonRequest = new BackendlessJsonRequest(Request.Method.DELETE, Backendless.url + "/" +  objectId, json, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
+                VolleyLog.d("delete ok", "ok");
                 Log.d("delete ok", "");
+
+                SyncAdapter.syncImmediately(Revizori.getAppContext());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("delete failed", "not ok");
                 Log.d("delete failed ", "");
             }
         });

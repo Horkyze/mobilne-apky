@@ -25,8 +25,4 @@ public class BackendlessJsonRequest extends JsonObjectRequest {
     }
 
 
-    @Override
-    public String getBodyContentType() {
-        return "application/json; charset=utf-8";
-    }
 }

@@ -16,7 +16,6 @@ public class Backendless {
         Map map = new HashMap<>();
         map.put("application-id", Backendless.appId);
         map.put("secret-key", Backendless.secret);
-        map.put("Content-Type", "application/json; charset=utf-8");
         return map;
     }
 
