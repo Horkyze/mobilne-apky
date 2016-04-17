@@ -94,5 +94,14 @@
             android:singleLine="true"
             android:text="blablabla"
             android:textSize="16sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Edit"
+            android:id="@+id/editBtn"
+            android:layout_alignParentBottom="true"
+            android:layout_alignRight="@+id/comment"
+            android:layout_alignEnd="@+id/comment" />
     </RelativeLayout>
 </LinearLayout>

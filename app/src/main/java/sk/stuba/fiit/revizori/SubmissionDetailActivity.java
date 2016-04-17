@@ -6,6 +6,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -39,7 +40,21 @@ public class SubmissionDetailActivity extends AppCompatActivity implements OnMap
         //submissionPosition = new LatLng(Double.parseDouble(getIntent().getStringExtra("latitude")), Double.parseDouble(getIntent().getStringExtra("longitude")));
         photoUrl = getIntent().getStringExtra("photoUrl");
 
-
+        Button edit = (Button) findViewById(R.id.editBtn);
+        edit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SubmissionDetailActivity.this, EditSubmissionActivity.class);
+                intent.putExtra("objectId", getIntent().getStringExtra("objectId"));
+                intent.putExtra("lineNumber", getIntent().getStringExtra("lineNumber"));
+                intent.putExtra("time", getIntent().getStringExtra("time"));
+                intent.putExtra("latitude", getIntent().getStringExtra("latitude"));
+                intent.putExtra("longitude", getIntent().getStringExtra("longitude"));
+                intent.putExtra("comment", getIntent().getStringExtra("comment"));
+                intent.putExtra("photoUrl", getIntent().getStringExtra("photoUrl"));
+                startActivity(intent);
+            }
+        });
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()

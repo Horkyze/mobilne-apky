@@ -7,12 +7,12 @@
     android:orientation="vertical"
     android:weightSum="4"
     tools:context=".EditSubmissionActivity">
-    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:id="@+id/edit_submission_position_map"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"/>
+    <!--<fragment xmlns:android="http://schemas.android.com/apk/res/android"-->
+        <!--android:name="com.google.android.gms.maps.SupportMapFragment"-->
+        <!--android:id="@+id/edit_submission_position_map"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="0dp"-->
+        <!--android:layout_weight="2"/>-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -71,15 +71,14 @@
             android:layout_marginRight="10dp"
             android:layout_centerHorizontal="true"
             android:hint="@string/comment_hint"
-            android:layout_above="@+id/editPostBtn" />
+            android:layout_above="@+id/editSubmissionButton" />
 
         <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/edit_btn"
-            android:id="@+id/editPostBtn"
+            android:id="@+id/editSubmissionButton"
             android:layout_alignParentBottom="true"
-            android:onClick=""
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"/>
     </RelativeLayout>

@@ -158,9 +158,6 @@ public class MainActivity extends AppCompatActivity implements
 
         SyncAdapter.initializeSyncAdapter(Revizori.getAppContext());
 
-//        RevizorDbHelper dbHelper = new RevizorDbHelper(Revizori.getAppContext());
-//        Cursor c = dbHelper.getReadableDatabase().rawQuery("SELECT * FROM revizor", null);
-//        RevizorCursorAdapter cursorAdapter = new RevizorCursorAdapter(Revizori.getAppContext(), c, 0);
 
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(revizorCursorAdapter);
@@ -172,6 +169,7 @@ public class MainActivity extends AppCompatActivity implements
                 Cursor cur = (Cursor) revizorCursorAdapter.getItem(position);
            
                 cur.moveToPosition(position);
+                intent.putExtra("objectId", revizorCursorAdapter.getObjectId(cur));
                 intent.putExtra("lineNumber", revizorCursorAdapter.getLineNumber(cur));
                 intent.putExtra("time", revizorCursorAdapter.getTime(cur));
                 intent.putExtra("distance", revizorCursorAdapter.getDistance(cur));

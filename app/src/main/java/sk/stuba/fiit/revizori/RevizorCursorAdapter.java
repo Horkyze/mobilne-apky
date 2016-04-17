@@ -58,7 +58,7 @@ public class RevizorCursorAdapter extends CursorAdapter {
                 cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_LONGITUDE)
         );
 
-        distance.setText(computeDistance(latitude, longitude) + " od vás");
+        //distance.setText(computeDistance(latitude, longitude) + " od vás");
     }
 
     private String computeDistance(double latitude, double longitude){
@@ -135,6 +135,12 @@ public class RevizorCursorAdapter extends CursorAdapter {
     public String getComment(Cursor cursor){
         return cursor.getString(
                 cursor.getColumnIndex(RevizorContract.RevizorEntry.COLUMN_COMMENT)
+        );
+    }
+
+    public String getObjectId(Cursor cursor){
+        return cursor.getString(
+                1
         );
     }
 

@@ -15,11 +15,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -34,6 +34,8 @@ import retrofit.client.Response;
 import sk.stuba.fiit.revizori.imgur.UploadService;
 import sk.stuba.fiit.revizori.imgur.model.ImageResponse;
 import sk.stuba.fiit.revizori.imgur.model.Upload;
+import sk.stuba.fiit.revizori.model.Revizor;
+import sk.stuba.fiit.revizori.service.RevizorService;
 
 public class EditSubmissionActivity extends AppCompatActivity implements OnMapReadyCallback {
 
@@ -49,10 +51,10 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.submission_detail);
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.edit_submission_position_map);
-        mapFragment.getMapAsync(this);
+        setContentView(R.layout.edit_submission);
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.edit_submission_position_map);
+//        mapFragment.getMapAsync(this);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -60,11 +62,13 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
+        TextView comment = (TextView) findViewById(R.id.comment);
+        comment.setText(getIntent().getStringExtra("comment"));
         revizorPhoto = (ImageView) findViewById(R.id.edit_new_revizor_photo);
 
         new ImageLoadTask("http://i.imgur.com/Si44mMq.jpg", revizorPhoto).execute();
 
-        Button editBtn = (Button) findViewById(R.id.editPostBtn);
+        Button editBtn = (Button) this.findViewById(R.id.editSubmissionButton);
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,7 +76,7 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
             }
         });
 
-        Button takePhotoBtn = (Button) findViewById(R.id.takePhotoBtn);
+        Button takePhotoBtn = (Button) findViewById(R.id.takePhotoAgainBtn);
         takePhotoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -81,8 +85,18 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
         });
     }
 
+
+
     public void onEditPostClick(){
-            //ulozia sa zmeny
+        //ulozia sa zmeny
+        Revizor r = new Revizor(getIntent().getStringExtra("line_number"),
+                getIntent().getDoubleExtra("latitude", 0),
+                getIntent().getDoubleExtra("longitude", 0),
+                getIntent().getStringExtra("photo_url"),
+                getIntent().getStringExtra("comment")
+                );
+        r.setOwnerId(getIntent().getStringExtra("objectId"));
+        RevizorService.getInstance().update(r);
         onBackPressed();
     }
 

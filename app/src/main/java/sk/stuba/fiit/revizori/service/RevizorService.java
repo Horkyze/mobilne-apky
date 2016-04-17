@@ -170,21 +170,32 @@ public class RevizorService {
             @Override
             public void onResponse(JSONObject response) {
                 VolleyLog.d("delete ok", "ok");
-                Log.d("delete ok", "");
-
                 SyncAdapter.syncImmediately(Revizori.getAppContext());
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("delete failed", "not ok");
-                Log.d("delete failed ", "");
             }
         });
         VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(jsonRequest);
 
+    }
 
+    public void update(Revizor r){
+        BackendlessJsonRequest jsonRequest = new BackendlessJsonRequest(Request.Method.PUT, Backendless.url, r.getPUTJson(), new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                VolleyLog.d("PUT ok", "ok");
+                SyncAdapter.syncImmediately(Revizori.getAppContext());
+            }
+        }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("PUT failed", "not ok");
 
-
+            }
+        });
+        VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(jsonRequest);
     }
 }
