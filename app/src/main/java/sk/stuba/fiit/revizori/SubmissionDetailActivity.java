@@ -6,7 +6,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -36,11 +35,12 @@ public class SubmissionDetailActivity extends AppCompatActivity implements OnMap
         timePostion.setText(getIntent().getStringExtra("time") + " " + getIntent().getStringExtra("distance"));
         TextView comment = (TextView) findViewById(R.id.comment);
         comment.setText(getIntent().getStringExtra("comment"));
-       // String a = getIntent().getStringExtra("latitude");
-        //submissionPosition = new LatLng(Double.parseDouble(getIntent().getStringExtra("latitude")), Double.parseDouble(getIntent().getStringExtra("longitude")));
+        String a = getIntent().getStringExtra("latitude");
+
+        submissionPosition = new LatLng(getIntent().getExtras().getDouble("latitude"), getIntent().getExtras().getDouble("longitude"));
         photoUrl = getIntent().getStringExtra("photoUrl");
 
-        Button edit = (Button) findViewById(R.id.editBtn);
+        /*Button edit = (Button) findViewById(R.id.editBtn);
         edit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -54,7 +54,7 @@ public class SubmissionDetailActivity extends AppCompatActivity implements OnMap
                 intent.putExtra("photoUrl", getIntent().getStringExtra("photoUrl"));
                 startActivity(intent);
             }
-        });
+        });*/
 
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -85,7 +85,6 @@ public class SubmissionDetailActivity extends AppCompatActivity implements OnMap
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        submissionPosition = new LatLng(-34, 151);
         map.addMarker(new MarkerOptions().position(submissionPosition).title(""));
         map.moveCamera(CameraUpdateFactory.newLatLng(submissionPosition));
         map.animateCamera(CameraUpdateFactory.zoomTo(15));

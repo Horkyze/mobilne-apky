@@ -176,7 +176,8 @@ public class MainActivity extends AppCompatActivity implements
                     intent = new Intent(MainActivity.this, SubmissionDetailActivity.class);
                 }
                 Cursor cur = (Cursor) revizorCursorAdapter.getItem(position);
-           
+
+
                 cur.moveToPosition(position);
                 intent.putExtra("objectId", revizorCursorAdapter.getObjectId(cur));
                 intent.putExtra("lineNumber", revizorCursorAdapter.getLineNumber(cur));
