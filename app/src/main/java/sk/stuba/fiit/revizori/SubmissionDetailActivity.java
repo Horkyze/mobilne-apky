@@ -35,27 +35,9 @@ public class SubmissionDetailActivity extends AppCompatActivity implements OnMap
         timePostion.setText(getIntent().getStringExtra("time") + " " + getIntent().getStringExtra("distance"));
         TextView comment = (TextView) findViewById(R.id.comment);
         comment.setText(getIntent().getStringExtra("comment"));
-        String a = getIntent().getStringExtra("latitude");
 
         submissionPosition = new LatLng(getIntent().getExtras().getDouble("latitude"), getIntent().getExtras().getDouble("longitude"));
         photoUrl = getIntent().getStringExtra("photoUrl");
-
-        /*Button edit = (Button) findViewById(R.id.editBtn);
-        edit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(SubmissionDetailActivity.this, EditSubmissionActivity.class);
-                intent.putExtra("objectId", getIntent().getStringExtra("objectId"));
-                intent.putExtra("lineNumber", getIntent().getStringExtra("lineNumber"));
-                intent.putExtra("time", getIntent().getStringExtra("time"));
-                intent.putExtra("latitude", getIntent().getStringExtra("latitude"));
-                intent.putExtra("longitude", getIntent().getStringExtra("longitude"));
-                intent.putExtra("comment", getIntent().getStringExtra("comment"));
-                intent.putExtra("photoUrl", getIntent().getStringExtra("photoUrl"));
-                startActivity(intent);
-            }
-        });*/
-
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.submission_position_map);

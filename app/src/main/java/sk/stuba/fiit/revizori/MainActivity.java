@@ -2,6 +2,7 @@ package sk.stuba.fiit.revizori;
 
 import android.app.AlertDialog;
 import android.app.LoaderManager;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
+import android.view.MenuInflater;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -26,6 +28,7 @@ import android.widget.ArrayAdapter;
 
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.android.volley.*;
 import com.android.volley.toolbox.StringRequest;
@@ -152,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements
         navigationView.setNavigationItemSelectedListener(this);
 
         navigationView.setCheckedItem(R.id.all_submissions);
+        mySubmissions = false;
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
@@ -169,20 +173,18 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent intent;
+                Cursor cur = (Cursor) revizorCursorAdapter.getItem(position);
+                cur.moveToPosition(position);
                 if(mySubmissions){
                     intent = new Intent(MainActivity.this, EditSubmissionActivity.class);
                 }
                 else{
                     intent = new Intent(MainActivity.this, SubmissionDetailActivity.class);
+                    intent.putExtra("time", revizorCursorAdapter.getTime(cur));
+                    intent.putExtra("distance", revizorCursorAdapter.getDistance(cur));
                 }
-                Cursor cur = (Cursor) revizorCursorAdapter.getItem(position);
-
-
-                cur.moveToPosition(position);
                 intent.putExtra("objectId", revizorCursorAdapter.getObjectId(cur));
                 intent.putExtra("lineNumber", revizorCursorAdapter.getLineNumber(cur));
-                intent.putExtra("time", revizorCursorAdapter.getTime(cur));
-                intent.putExtra("distance", revizorCursorAdapter.getDistance(cur));
                 intent.putExtra("latitude", revizorCursorAdapter.getLatitude(cur));
                 intent.putExtra("longitude", revizorCursorAdapter.getLongitude(cur));
                 intent.putExtra("comment", revizorCursorAdapter.getComment(cur));
@@ -241,9 +243,35 @@ public class MainActivity extends AppCompatActivity implements
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main, menu);
+
+        // Associate searchable configuration with the SearchView
+        SearchManager searchManager =
+                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView =
+                (SearchView) menu.findItem(R.id.search).getActionView();
+        if (null != searchView) {
+            searchView.setSearchableInfo(searchManager
+                    .getSearchableInfo(getComponentName()));
+            searchView.setIconifiedByDefault(false);
+        }
+        searchView.setQueryHint(getResources().getString(R.string.search_hint));
+        SearchView.OnQueryTextListener queryTextListener = new SearchView.OnQueryTextListener() {
+            public boolean onQueryTextChange(String newText) {
+                // this is your adapter that will be filtered
+                return true;
+            }
+
+            public boolean onQueryTextSubmit(String query) {
+                //Here u can get the value "query" which is entered in the search box.
+
+                return true;
+            }
+        };
+        searchView.setOnQueryTextListener(queryTextListener);
+
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
@@ -295,6 +323,4 @@ public class MainActivity extends AppCompatActivity implements
     public Context getContext(){
         return this.context;
     }
-
-
 }

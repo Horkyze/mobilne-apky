@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CursorAdapter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -20,7 +21,7 @@ import sk.stuba.fiit.revizori.data.RevizorContract;
 import sk.stuba.fiit.revizori.service.LocationService;
 
 
-public class RevizorCursorAdapter extends CursorAdapter {
+public class RevizorCursorAdapter extends CursorAdapter implements Filterable {
 
     public RevizorCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);

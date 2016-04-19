@@ -1,6 +1,8 @@
 package sk.stuba.fiit.revizori;
 
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -11,15 +13,19 @@ import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
@@ -43,8 +49,14 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
 
     private String photoPath;
     private ImageView revizorPhoto;
-    private String uploadedPhotoUrl;
+    static final String PHOTO_PATH = "photoPath";
+    private String photoUrl;
+    private LatLng submissionPosition;
 
+    TextView comment;
+    TextView lineNumber;
+
+    String objectId;
     final int REQUEST_IMAGE_CAPTURE = 1;
 
 
@@ -52,23 +64,24 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.edit_submission);
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.edit_submission_position_map);
-//        mapFragment.getMapAsync(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setHomeButtonEnabled(true);
-            actionBar.setDisplayHomeAsUpEnabled(true);
+        if (savedInstanceState != null) {
+            // Restore value of members from saved state
+            photoPath = savedInstanceState.getString(PHOTO_PATH);
         }
-
-        TextView comment = (TextView) findViewById(R.id.comment);
+        objectId = getIntent().getStringExtra("objectId");
+        lineNumber = (TextView) findViewById(R.id.line_number_edit);
+        lineNumber.setText(getIntent().getStringExtra("lineNumber"));
+        comment = (TextView) findViewById(R.id.comment_edit);
         comment.setText(getIntent().getStringExtra("comment"));
+
+        submissionPosition = new LatLng(getIntent().getExtras().getDouble("latitude"), getIntent().getExtras().getDouble("longitude"));
+
+        photoUrl = getIntent().getStringExtra("photoUrl");
         revizorPhoto = (ImageView) findViewById(R.id.edit_new_revizor_photo);
+        new ImageLoadTask(photoUrl, revizorPhoto).execute();
 
-        new ImageLoadTask("http://i.imgur.com/Si44mMq.jpg", revizorPhoto).execute();
-
-        Button editBtn = (Button) this.findViewById(R.id.editSubmissionButton);
+        Button editBtn = (Button) findViewById(R.id.editSubmissionButton);
         editBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,20 +96,73 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
                 onTakePhotoAgainClick();
             }
         });
+        /*ImageButton deleteBtn = (ImageButton) findViewById(R.id.deleteBtn);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDeleteClick();
+            }
+        });*/
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.edit_submission_position_map);
+        mapFragment.getMapAsync(this);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setHomeButtonEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+
+        revizorPhoto.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent intent = new Intent(EditSubmissionActivity.this, PhotoDetail.class);
+                intent.putExtra("photo_url", photoUrl);
+                startActivity(intent);
+            }
+        });
+
     }
-
-
 
     public void onEditPostClick(){
         //ulozia sa zmeny
         Revizor r = new Revizor(getIntent().getStringExtra("line_number"),
                 getIntent().getDoubleExtra("latitude", 0),
                 getIntent().getDoubleExtra("longitude", 0),
-                getIntent().getStringExtra("photo_url"),
-                getIntent().getStringExtra("comment")
+                photoUrl,
+                comment.getText().toString()
                 );
         r.setOwnerId(getIntent().getStringExtra("objectId"));
         RevizorService.getInstance().update(r);
+        onBackPressed();
+    }
+
+    public void onDeleteClick(){
+        DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+
+                switch (which) {
+                    case DialogInterface.BUTTON_POSITIVE:
+                        //Yes button clicked
+                        //getContentResolver().delete(RevizorContract.RevizorEntry.buildRevizorUri(id), "_id = " + id, null);
+                        //RevizorService.getInstance().delete( (int) id );
+
+                        break;
+
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        //No button clicked
+                        break;
+                }
+            }
+        };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(EditSubmissionActivity.this);
+        builder.setCancelable(true);
+
+        builder.setMessage("Naozaj chcete hlasenie zmazat?").setPositiveButton("Yes", dialogClickListener)
+                .setNegativeButton("No", dialogClickListener).show();
+
         onBackPressed();
     }
 
@@ -125,7 +191,6 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             uploadPhoto();
-            setPic();
         }
     }
 
@@ -182,7 +247,8 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
 
         @Override
         public void success(ImageResponse imageResponse, Response response) {
-            uploadedPhotoUrl = imageResponse.data.link;
+            photoUrl = imageResponse.data.link;
+            new ImageLoadTask(photoUrl, revizorPhoto).execute();
         }
 
         @Override
@@ -198,9 +264,8 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
     public void onMapReady(GoogleMap googleMap) {
         map = googleMap;
 
-        LatLng sydney = new LatLng(-34, 151);
-        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        map.addMarker(new MarkerOptions().position(submissionPosition).title(""));
+        map.moveCamera(CameraUpdateFactory.newLatLng(submissionPosition));
         map.animateCamera(CameraUpdateFactory.zoomTo(15));
     }
 
@@ -213,5 +278,18 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putString(PHOTO_PATH, photoPath);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.delete, menu);
+        return true;
     }
 }

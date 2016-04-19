@@ -69,6 +69,7 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
             // Restore value of members from saved state
             photoPath = savedInstanceState.getString(PHOTO_PATH);
         }
+        uploadedPhotoUrl = "";
 
         newRevizorPhoto = (ImageView) findViewById(R.id.new_revizor_photo);
 
@@ -161,7 +162,6 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             uploadPhoto();
-            setPic();
         }
     }
 
@@ -219,6 +219,7 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
         @Override
         public void success(ImageResponse imageResponse, Response response) {
             uploadedPhotoUrl = imageResponse.data.link;
+            new ImageLoadTask(uploadedPhotoUrl, newRevizorPhoto).execute();
         }
 
         @Override
@@ -272,10 +273,8 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save the user's current game state
         savedInstanceState.putString(PHOTO_PATH, photoPath);
 
-        // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
 }

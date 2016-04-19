@@ -40,8 +40,8 @@
             android:layout_centerHorizontal="true"/>
 
         <ImageView
-            android:layout_width="@dimen/photo_thumbnail_width"
-            android:layout_height="@dimen/photo_thumbnail_height"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/new_revizor_photo"
             android:layout_margin="5dp"
             android:layout_toRightOf="@id/takePhotoBtn"
