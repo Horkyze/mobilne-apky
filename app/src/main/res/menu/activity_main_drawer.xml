@@ -3,9 +3,13 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/my_posts"
+            android:id="@+id/all_submissions"
             android:icon="@android:drawable/ic_menu_myplaces"
-            android:title="Moje Prispevky" />
+            android:title="@string/all_submissions" />
+        <item
+            android:id="@+id/my_submissions"
+            android:icon="@android:drawable/ic_menu_myplaces"
+            android:title="@string/my_submissions" />
     </group>
 
     <item android:title="System">
@@ -13,11 +17,11 @@
             <item
                 android:id="@+id/logout"
                 android:icon="@android:drawable/ic_menu_close_clear_cancel"
-                android:title="Logout" />
+                android:title="@string/logout" />
             <item
                 android:id="@+id/delete_local_db"
                 android:icon="@android:drawable/ic_delete"
-                android:title="Clear local data" />
+                android:title="@string/delete_local_db" />
         </menu>
     </item>
 

@@ -24,6 +24,7 @@ import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 
+import android.widget.Button;
 import android.widget.ListView;
 
 import com.android.volley.*;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements
         SwipeRefreshLayout.OnRefreshListener {
 
     private Context context;
+    private boolean mySubmissions;              //TRUE = only my, FLASE = all
     private RevizorCursorAdapter revizorCursorAdapter;
     // For the forecast view we're showing only a small subset of the stored data.
     // Specify the columns we need.
@@ -149,6 +151,8 @@ public class MainActivity extends AppCompatActivity implements
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        navigationView.setCheckedItem(R.id.all_submissions);
+
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.refreshLayout);
         swipeRefreshLayout.setOnRefreshListener(this);
 
@@ -158,14 +162,19 @@ public class MainActivity extends AppCompatActivity implements
 
         SyncAdapter.initializeSyncAdapter(Revizori.getAppContext());
 
-
         final ListView listview = (ListView) findViewById(R.id.listView);
         listview.setAdapter(revizorCursorAdapter);
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(MainActivity.this, SubmissionDetailActivity.class);
+                Intent intent;
+                if(mySubmissions){
+                    intent = new Intent(MainActivity.this, EditSubmissionActivity.class);
+                }
+                else{
+                    intent = new Intent(MainActivity.this, SubmissionDetailActivity.class);
+                }
                 Cursor cur = (Cursor) revizorCursorAdapter.getItem(position);
            
                 cur.moveToPosition(position);
@@ -253,14 +262,20 @@ public class MainActivity extends AppCompatActivity implements
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
+        if (id == R.id.my_submissions){
+            mySubmissions = true;
+        }
 
+        if (id == R.id.all_submissions){
+            mySubmissions = false;
+        }
 
         if (id == R.id.logout) {
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         } else if (id == R.id.delete_local_db) {
-           getContentResolver().delete(RevizorContract.RevizorEntry.CONTENT_URI, null, null);
-        }
+        getContentResolver().delete(RevizorContract.RevizorEntry.CONTENT_URI, null, null);
+    }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

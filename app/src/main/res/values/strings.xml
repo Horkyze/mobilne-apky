@@ -43,6 +43,12 @@
     <string name="take_photo_again_btn">Odfoť znova</string>
     <string name="edit_btn">Upraviť</string>
 
+    <!-- Menu -->
+    <string name="my_submissions">Moje Hlásenia</string>
+    <string name="all_submissions">Všetky Hlásenia</string>
+    <string name="logout">Odhlásiť sa</string>
+    <string name="delete_local_db">Clear local data</string>
+
     <!-- imgur -->
     <string name="notification_progress">Uploading image...</string>
     <string name="notifaction_success">Successfully uploaded</string>
