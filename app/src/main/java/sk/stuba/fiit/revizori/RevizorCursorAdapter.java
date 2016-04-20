@@ -3,6 +3,7 @@ package sk.stuba.fiit.revizori;
 import android.content.Context;
 import android.database.Cursor;
 import android.location.Location;
+import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,6 +36,11 @@ public class RevizorCursorAdapter extends CursorAdapter implements Filterable {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
+
+        if (cursor.getCount() == 0){
+            Snackbar.make(view, "Database empty", Snackbar.LENGTH_SHORT).show();
+            return;
+        }
         // Find fields to populate in inflated template
         TextView lineNumber = (TextView) view.findViewById(R.id.row_line_number);
         TextView distance = (TextView) view.findViewById(R.id.distance);
@@ -67,6 +73,9 @@ public class RevizorCursorAdapter extends CursorAdapter implements Filterable {
         submissionLocation.setLatitude(latitude);
         submissionLocation.setLongitude(longitude);
         Location myLocation = getMyLocation();
+        if (myLocation == null){
+            return "--";
+        }
         float distance = submissionLocation.distanceTo(myLocation);
         if(distance > 100){
             distance = (float)(Math.round(distance / 1000 * 10d) / 10d);

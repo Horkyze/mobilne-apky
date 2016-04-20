@@ -39,7 +39,11 @@ public class Revizor extends ModelBase {
             jo.put("line_number", this.line_number);
             jo.put("latitude", this.latitude);
             jo.put("longitude", this.longitude);
-            jo.put("photo_url", this.photo_url);
+            if (photo_url.isEmpty()){
+                jo.put(photo_url, null);
+            } else {
+                jo.put("photo_url", this.photo_url);
+            }
             jo.put("comment", this.comment);
             jo.put("___class", "revizor");
             jo.put("__meta", meta);

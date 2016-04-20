@@ -59,7 +59,7 @@ public class RevizorService {
     ArrayList<Revizor> revizori = new ArrayList<>();
 
     public void createRevizor(Revizor r){
-        BackendlessJsonRequest request = new BackendlessJsonRequest(Request.Method.PUT, Backendless.url, r.getPOSTjson(), new Response.Listener<JSONObject>() {
+        BackendlessJsonRequest request = new BackendlessJsonRequest(Request.Method.POST, Backendless.url, r.getPOSTjson(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 System.out.println(response.toString());

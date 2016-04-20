@@ -268,6 +268,9 @@ public class CreateRevizorActivity extends AppCompatActivity implements OnMapRea
             //mMap.addMarker(new MarkerOptions().position(myPosition));
             map.moveCamera(CameraUpdateFactory.newLatLng(myPosition));
             map.animateCamera(CameraUpdateFactory.zoomTo(15));
+        } else {
+            // create mock location
+            myPosition = new LatLng(0, 0);
         }
     }
 
