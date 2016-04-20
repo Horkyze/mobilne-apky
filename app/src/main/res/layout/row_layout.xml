@@ -11,13 +11,12 @@
         android:layout_height="fill_parent"
         android:layout_alignParentBottom="true"
         android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
         android:text="@+id/row_line_number"
         android:singleLine="false"
         android:textColor="#e74c3c"
         android:textSize="@dimen/abc_text_size_display_2_material"
-        android:layout_alignRight="@+id/separator"
-        android:layout_alignEnd="@+id/separator"
-        android:layout_marginRight="6dp"/>
+        android:layout_marginRight="15dp"/>
 
     <View
         android:id="@+id/separator"

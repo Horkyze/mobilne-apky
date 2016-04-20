@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.support.design.widget.Snackbar;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.alirezaafkar.json.requester.Requester;
 import com.android.volley.AuthFailureError;
@@ -70,6 +71,8 @@ public class RevizorService {
             public void onErrorResponse(VolleyError error) {
                 //Log.e("Volley", error.getMessage());
                 error.printStackTrace();
+                Toast.makeText(Revizori.getAppContext(), "Nepodarilo sa vytvoriť nový príspevok", Toast.LENGTH_LONG).show();
+
 
             }
         });
@@ -176,6 +179,7 @@ public class RevizorService {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("delete failed", "not ok");
+                Toast.makeText(Revizori.getAppContext(), "Nepodarilo sa zmazať príspevok", Toast.LENGTH_LONG).show();
             }
         });
         VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(jsonRequest);
@@ -205,7 +209,7 @@ public class RevizorService {
             @Override
             public void onErrorResponse(VolleyError error) {
                 VolleyLog.e("PUT failed", "not ok");
-
+                Toast.makeText(Revizori.getAppContext(), "Nepodarilo sa upraviť príspevok", Toast.LENGTH_LONG).show();
             }
         });
         VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(jsonRequest);

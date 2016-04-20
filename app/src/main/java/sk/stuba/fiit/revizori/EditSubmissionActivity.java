@@ -238,7 +238,6 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
     }
     private void uploadPhoto(){
         Upload upload = new Upload();
-        System.out.println(photoPath);
         upload.image = new File(photoPath);
         //upload.albumId = Constants.ALBUM_ID;
         new UploadService(this).Execute(upload, new UiCallback());

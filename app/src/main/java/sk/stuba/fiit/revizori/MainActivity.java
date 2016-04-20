@@ -9,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -29,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.Toast;
 
 import com.android.volley.*;
 import com.android.volley.toolbox.StringRequest;
@@ -175,10 +177,9 @@ public class MainActivity extends AppCompatActivity implements
                 Intent intent;
                 Cursor cur = (Cursor) revizorCursorAdapter.getItem(position);
                 cur.moveToPosition(position);
-                if(mySubmissions){
+                if (mySubmissions) {
                     intent = new Intent(MainActivity.this, EditSubmissionActivity.class);
-                }
-                else{
+                } else {
                     intent = new Intent(MainActivity.this, SubmissionDetailActivity.class);
                     intent.putExtra("time", revizorCursorAdapter.getTime(cur));
                     intent.putExtra("distance", revizorCursorAdapter.getDistance(cur));
@@ -205,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements
                             case DialogInterface.BUTTON_POSITIVE:
                                 //Yes button clicked
                                 //getContentResolver().delete(RevizorContract.RevizorEntry.buildRevizorUri(id), "_id = " + id, null);
-                                RevizorService.getInstance().delete( (int) id );
+                                RevizorService.getInstance().delete((int) id);
 
                                 break;
 
@@ -228,7 +229,17 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+        chceckInternetConnection();
+    }
 
+    private boolean  chceckInternetConnection() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if(cm.getActiveNetworkInfo() == null){
+            Toast.makeText(context, "Dáta nie su aktuálne, žiadne pripojenie", Toast.LENGTH_LONG).show();
+            return false;
+        }
+        return true;
     }
 
 
@@ -318,6 +329,9 @@ public class MainActivity extends AppCompatActivity implements
         SyncAdapter.syncImmediately(Revizori.getAppContext());
 
         swipeRefreshLayout.setRefreshing(false);
+
+        chceckInternetConnection();
+
 
     }
 
