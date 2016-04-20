@@ -126,13 +126,14 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
 
     public void onEditPostClick(){
         //ulozia sa zmeny
-        Revizor r = new Revizor(getIntent().getStringExtra("line_number"),
+        Revizor r = new Revizor(getIntent().getStringExtra("lineNumber"),
                 getIntent().getDoubleExtra("latitude", 0),
                 getIntent().getDoubleExtra("longitude", 0),
                 photoUrl,
                 comment.getText().toString()
                 );
-        r.setOwnerId(getIntent().getStringExtra("objectId"));
+        r.set_id(getIntent().getLongExtra("_id", 0));
+        r.setObjectId(getIntent().getStringExtra("objectId"));
         RevizorService.getInstance().update(r);
         onBackPressed();
     }

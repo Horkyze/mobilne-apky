@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements
                     intent.putExtra("time", revizorCursorAdapter.getTime(cur));
                     intent.putExtra("distance", revizorCursorAdapter.getDistance(cur));
                 }
+                intent.putExtra("_id", id);
                 intent.putExtra("objectId", revizorCursorAdapter.getObjectId(cur));
                 intent.putExtra("lineNumber", revizorCursorAdapter.getLineNumber(cur));
                 intent.putExtra("latitude", revizorCursorAdapter.getLatitude(cur));
@@ -303,8 +304,8 @@ public class MainActivity extends AppCompatActivity implements
             Intent intent = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(intent);
         } else if (id == R.id.delete_local_db) {
-        getContentResolver().delete(RevizorContract.RevizorEntry.CONTENT_URI, null, null);
-    }
+            getContentResolver().delete(RevizorContract.RevizorEntry.CONTENT_URI, null, null);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -183,7 +183,19 @@ public class RevizorService {
     }
 
     public void update(Revizor r){
-        BackendlessJsonRequest jsonRequest = new BackendlessJsonRequest(Request.Method.PUT, Backendless.url, r.getPUTJson(), new Response.Listener<JSONObject>() {
+        Uri uri = RevizorContract.RevizorEntry.buildRevizorUri(r.get_id());
+        Cursor c = Revizori.getAppContext().getContentResolver().query(uri, null, null, null, null);
+
+        try {
+            c.moveToFirst();
+            r.setObjectId( c.getString(1) );
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        c.close();
+
+        BackendlessJsonRequest jsonRequest = new BackendlessJsonRequest(Request.Method.PUT, Backendless.url + "/" + r.getObjectId(), r.getPUTJson(), new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
                 VolleyLog.d("PUT ok", "ok");
