@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -56,7 +57,7 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
     TextView comment;
     TextView lineNumber;
 
-    String objectId;
+    long id;
     final int REQUEST_IMAGE_CAPTURE = 1;
 
 
@@ -69,7 +70,7 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
             // Restore value of members from saved state
             photoPath = savedInstanceState.getString(PHOTO_PATH);
         }
-        objectId = getIntent().getStringExtra("objectId");
+        id = getIntent().getExtras().getLong("_id");
         lineNumber = (TextView) findViewById(R.id.line_number_edit);
         lineNumber.setText(getIntent().getStringExtra("lineNumber"));
         comment = (TextView) findViewById(R.id.comment_edit);
@@ -96,13 +97,6 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
                 onTakePhotoAgainClick();
             }
         });
-        /*ImageButton deleteBtn = (ImageButton) findViewById(R.id.deleteBtn);
-        deleteBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onDeleteClick();
-            }
-        });*/
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.edit_submission_position_map);
@@ -147,24 +141,25 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
                     case DialogInterface.BUTTON_POSITIVE:
                         //Yes button clicked
                         //getContentResolver().delete(RevizorContract.RevizorEntry.buildRevizorUri(id), "_id = " + id, null);
-                        //RevizorService.getInstance().delete( (int) id );
-
+                        RevizorService.getInstance().delete((int) id);
+                        onBackPressed();
                         break;
 
                     case DialogInterface.BUTTON_NEGATIVE:
                         //No button clicked
                         break;
                 }
+
             }
         };
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(EditSubmissionActivity.this);
-        builder.setCancelable(true);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        //builder.setCancelable(true);
 
         builder.setMessage("Naozaj chcete hlasenie zmazat?").setPositiveButton("Yes", dialogClickListener)
                 .setNegativeButton("No", dialogClickListener).show();
 
-        onBackPressed();
+
     }
 
     public void onTakePhotoAgainClick() {
@@ -275,7 +270,7 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
             case android.R.id.home:
                 onBackPressed();
                 return true;
-            default:
+           default:
                 return super.onOptionsItemSelected(item);
         }
     }
@@ -290,6 +285,25 @@ public class EditSubmissionActivity extends AppCompatActivity implements OnMapRe
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.delete, menu);
+
         return true;
     }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem actionViewItem = menu.findItem(R.id.delete);
+        // Retrieve the action-view from menu
+        View v = MenuItemCompat.getActionView(actionViewItem);
+        // Find the button within action-view
+        ImageButton deleteBtn = (ImageButton) v.findViewById(R.id.deleteBtn);
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onDeleteClick();
+            }
+        });
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+
 }
