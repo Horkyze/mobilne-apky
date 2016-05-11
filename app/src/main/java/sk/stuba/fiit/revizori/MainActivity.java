@@ -332,6 +332,7 @@ public class MainActivity extends AppCompatActivity implements
 
         chceckInternetConnection();
 
+        RevizorService.getInstance().getAll_webSocket();
 
     }
 

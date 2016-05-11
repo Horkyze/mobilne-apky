@@ -24,11 +24,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.socket.client.IO;
+import io.socket.client.Socket;
+import io.socket.emitter.Emitter;
 import sk.stuba.fiit.revizori.Revizori;
 import sk.stuba.fiit.revizori.VolleySingleton;
 import sk.stuba.fiit.revizori.backendless.Backendless;
@@ -52,6 +56,9 @@ public class RevizorService {
 
 
     String url = "/revizor";
+
+    // app generated uuidv4
+    String user = "d7ef639c-83c8-40d0-ab9d-2bd655191804";
 
     public ArrayList<Revizor> getRevizori() {
         return revizori;
@@ -213,5 +220,39 @@ public class RevizorService {
             }
         });
         VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(jsonRequest);
+    }
+
+    public void getAll_webSocket(){
+
+        final Socket socket;
+        try {
+            socket = IO.socket("http://sandbox.touch4it.com:1341/data");
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
+        socket.on(Socket.EVENT_CONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                socket.emit("foo", "hi");
+                socket.disconnect();
+            }
+
+        }).on("event", new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {
+                JSONObject obj = (JSONObject)args[0];
+            }
+
+        }).on(Socket.EVENT_DISCONNECT, new Emitter.Listener() {
+
+            @Override
+            public void call(Object... args) {}
+
+        });
+        socket.connect();
+
     }
 }
