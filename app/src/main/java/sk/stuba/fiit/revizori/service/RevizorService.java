@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -199,7 +200,7 @@ public class RevizorService {
 
         try {
             c.moveToFirst();
-            r.setObjectId( c.getString(1) );
+            r.setObjectId(c.getString(1));
         } catch (Exception e) {
             e.printStackTrace();
             return;
@@ -223,8 +224,54 @@ public class RevizorService {
     }
 
     public void getAll_webSocket(){
-
         final Socket socket;
+        IO.Options opts = new IO.Options();
+        opts.secure = false;
+        opts.port = 1341;
+        opts.reconnection = true;
+        opts.forceNew = true;
+        opts.timeout = 5000;
+        try {
+            socket = IO.socket("http://sandbox.touch4it.com:1341/?__sails_io_sdk_version=0.12.1", opts);
+            socket.connect();
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+            return;
+        }
+
+        JSONObject js = new JSONObject();
+        try {
+            js.put("url", "/data/d7ef639c-83c8-40d0-ab9d-2bd655191804");
+            js.put("data", new JSONObject().put("data", new JSONObject("     {\n" +
+                    "         \\\"Employee\\\" :[\n" +
+                    "         {\n" +
+                    "            \\\"id\\\":\\\"01\\\",\n" +
+                    "            \\\"name\\\":\\\"Gopal Varma\\\",\n" +
+                    "            \\\"salary\\\":\\\"500000\\\"\n" +
+                    "         },\n" +
+                    "         {\n" +
+                    "            \\\"id\\\":\\\"02\\\",\n" +
+                    "            \\\"name\\\":\\\"Sairamkrishna\\\",\n" +
+                    "            \\\"salary\\\":\\\"500000\\\"\n" +
+                    "         },\n" +
+                    "         {\n" +
+                    "            \\\"id\\\":\\\"03\\\",\n" +
+                    "            \\\"name\\\":\\\"Sathish kallakuri\\\",\n" +
+                    "            \\\"salary\\\":\\\"600000\\\"\n" +
+                    "         }\n" +
+                    "         ] \n" +
+                    "      }")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        socket.emit("post", js, new Ack() {
+            @Override
+            public void call(Object... args) {
+                System.out.println("cau");}
+        });
+
+
+/*        final Socket socket;
         try {
             socket = IO.socket("http://sandbox.touch4it.com:1341/data");
         } catch (URISyntaxException e) {
@@ -252,7 +299,7 @@ public class RevizorService {
             public void call(Object... args) {}
 
         });
-        socket.connect();
+        socket.connect();*/
 
     }
 }
