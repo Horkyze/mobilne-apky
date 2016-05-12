@@ -7,6 +7,9 @@ import com.google.gson.JsonObject;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Date;
+import java.util.UUID;
+
 public class Revizor extends ModelBase {
     private String line_number;
     private double latitude;
@@ -20,6 +23,9 @@ public class Revizor extends ModelBase {
         this.longitude = longitude;
         this.photo_url = photo_url;
         this.comment = comment;
+        this.setCreated(new Date());
+        this.setUpdated(new Date());
+        this.setObjectId(UUID.randomUUID().toString());
     }
 
     public Revizor(String line_number, double latitude, double longitude) {
@@ -28,9 +34,12 @@ public class Revizor extends ModelBase {
         this.longitude = longitude;
         this.photo_url = "";
         this.comment = "";
+        this.setCreated(new Date());
+        this.setUpdated(new Date());
+        this.setObjectId(UUID.randomUUID().toString());
     }
 
-    public JSONObject getPOSTjson(){
+    public JSONObject getPUTJson(){
 
         JSONObject jo = new JSONObject();
         char QUOTE = '"';
@@ -53,23 +62,27 @@ public class Revizor extends ModelBase {
         return jo;
     }
 
-    public JSONObject getPUTJson(){
+    public JSONObject getPOSTjson(){
 
         JSONObject jo = new JSONObject();
-        char QUOTE = '"';
-        String meta = "{"+QUOTE+"relationRemovalIds"+QUOTE+":{},"+QUOTE+"selectedProperties"+QUOTE+":["+QUOTE+"line_number"+QUOTE+","+QUOTE+"created"+QUOTE+","+QUOTE+"___saved"+QUOTE+","+QUOTE+"latitude"+QUOTE+","+QUOTE+"___class"+QUOTE+","+QUOTE+"comment"+QUOTE+","+QUOTE+"photo_url"+QUOTE+","+QUOTE+"ownerId"+QUOTE+","+QUOTE+"updated"+QUOTE+","+QUOTE+"objectId"+QUOTE+","+QUOTE+"longitude"+QUOTE+"],"+QUOTE+"relatedObjects"+QUOTE+":{}}";
+        //char QUOTE = '"';
+        //String meta = "{"+QUOTE+"relationRemovalIds"+QUOTE+":{},"+QUOTE+"selectedProperties"+QUOTE+":["+QUOTE+"line_number"+QUOTE+","+QUOTE+"created"+QUOTE+","+QUOTE+"___saved"+QUOTE+","+QUOTE+"latitude"+QUOTE+","+QUOTE+"___class"+QUOTE+","+QUOTE+"comment"+QUOTE+","+QUOTE+"photo_url"+QUOTE+","+QUOTE+"ownerId"+QUOTE+","+QUOTE+"updated"+QUOTE+","+QUOTE+"objectId"+QUOTE+","+QUOTE+"longitude"+QUOTE+"],"+QUOTE+"relatedObjects"+QUOTE+":{}}";
         try {
             jo.put("line_number", this.line_number);
             jo.put("latitude", this.latitude);
             jo.put("longitude", this.longitude);
             if (photo_url.isEmpty()){
-                jo.put(photo_url, null);
+                jo.put("photo_url", "http://i.imgur.com/1muyJ.jpg");
             } else {
                 jo.put("photo_url", this.photo_url);
             }
             jo.put("comment", this.comment);
-            jo.put("___class", "revizor");
-            jo.put("__meta", meta);
+            jo.put("objectId", this.getObjectId());
+            //jo.put("ownerId", this.getOwnerId());
+            jo.put("created", this.getCreated());
+            jo.put("updated", this.getUpdated());
+            //jo.put("___class", "revizor");
+            //jo.put("__meta", meta);
         } catch (JSONException e) {
             e.printStackTrace();
         }

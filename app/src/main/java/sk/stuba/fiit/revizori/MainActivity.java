@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public void onClick(View view) {
                 //setContentView(R.layout.activity_create_post);
+                RevizorService.getInstance().create_webSocket();
                 Intent intent = new Intent(MainActivity.this, CreateRevizorActivity.class);
                 startActivity(intent);
 

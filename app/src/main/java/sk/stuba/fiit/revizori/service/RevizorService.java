@@ -30,6 +30,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import io.socket.client.Ack;
 import io.socket.client.IO;
 import io.socket.client.Socket;
 import io.socket.emitter.Emitter;
@@ -44,6 +45,7 @@ import sk.stuba.fiit.revizori.data.RevizorProvider;
 import sk.stuba.fiit.revizori.model.Revizor;
 import sk.stuba.fiit.revizori.sync.SyncAdapter;
 import sk.stuba.fiit.revizori.sync.SyncService;
+import sk.stuba.fiit.revizori.websocket.WebSocketHandler;
 
 
 public class RevizorService {
@@ -58,7 +60,7 @@ public class RevizorService {
     String url = "/revizor";
 
     // app generated uuidv4
-    String user = "d7ef639c-83c8-40d0-ab9d-2bd655191804";
+    String user = "l337beef1";
 
     public ArrayList<Revizor> getRevizori() {
         return revizori;
@@ -67,91 +69,99 @@ public class RevizorService {
     ArrayList<Revizor> revizori = new ArrayList<>();
 
     public void createRevizor(Revizor r){
-        BackendlessJsonRequest request = new BackendlessJsonRequest(Request.Method.POST, Backendless.url, r.getPOSTjson(), new Response.Listener<JSONObject>() {
+
+        Socket socket = WebSocketHandler.getSocket();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("url", "/data/" + this.user);
+            obj.put("data", new JSONObject().put("data", r.getPOSTjson()));
+        } catch (Exception e){
+
+        }
+
+
+        socket.emit("post", obj, new Ack() {
             @Override
-            public void onResponse(JSONObject response) {
-                System.out.println(response.toString());
-            }
-
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                //Log.e("Volley", error.getMessage());
-                error.printStackTrace();
-                Toast.makeText(Revizori.getAppContext(), "Nepodarilo sa vytvoriť nový príspevok", Toast.LENGTH_LONG).show();
-
-
+            public void call(Object... args) {
+                Log.d("WEBSOCKET", "GOT RESPONSE");
+                JSONObject o = (JSONObject)args[0];
+                Log.d("WEBSICKET", o.toString());
             }
         });
-        VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(request);
+//
+//        BackendlessJsonRequest request = new BackendlessJsonRequest(Request.Method.POST, Backendless.url, r.getPOSTjson(), new Response.Listener<JSONObject>() {
+//            @Override
+//            public void onResponse(JSONObject response) {
+//                System.out.println(response.toString());
+//            }
+//
+//        }, new Response.ErrorListener() {
+//            @Override
+//            public void onErrorResponse(VolleyError error) {
+//                //Log.e("Volley", error.getMessage());
+//                error.printStackTrace();
+//                Toast.makeText(Revizori.getAppContext(), "Nepodarilo sa vytvoriť nový príspevok", Toast.LENGTH_LONG).show();
+//
+//
+//            }
+//        });
+//        VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(request);
 
     }
 
     public void getAll(){
-        BackendlessRequest br = new BackendlessRequest(Request.Method.GET, url,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        try {
-                            Log.d("some", "got response");
-                            JSONObject jsonReader = new JSONObject(response);
-                            JSONArray submissions = jsonReader.getJSONArray("data");
-                            for(int i = 0; i < submissions.length(); i++)
-                            {
-                                JSONObject sub = submissions.getJSONObject(i);
-//                                Revizor r = new Revizor(
-//                                    sub.getString("line_number"),
-//                                    sub.getDouble("latitude"),
-//                                    sub.getDouble("longitude"),
-//                                    sub.getString("photo_url"),
-//                                    sub.getString("comment"));
 
-                                if (sub.isNull("updated"))
-                                    sub.put("updated", 0);
-                                if (sub.isNull("ownerId"))
-                                    sub.put("ownerId", 0);
+        Socket socket = WebSocketHandler.getSocket();
 
-//                                r.setCreated(new Date(sub.getInt("created")));
-//                                r.setUpdated(new Date(sub.getInt("updated")));
-//                                r.setObjectId(sub.getString("objectId"));
-//                                r.setOwnerId(sub.getString("ownerId"));
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("url", "/data/" + this.user);
+        } catch (Exception e){
 
-//                                revizori.add(r);
+        }
 
-                                ContentValues cv = new ContentValues();
-                                cv.put(RevizorContract.RevizorEntry.COLUMN_LINE_NUMBER, sub.getString("line_number"));
-                                cv.put(RevizorContract.RevizorEntry.COLUMN_LATITUDE, sub.getString("latitude"));
-                                cv.put(RevizorContract.RevizorEntry.COLUMN_LONGITUDE, sub.getString("longitude"));
-                                cv.put(RevizorContract.RevizorEntry.COLUMN_PHOTO_URL, sub.getString("photo_url"));
-                                cv.put(RevizorContract.RevizorEntry.COLUMN_COMMENT, sub.getString("comment"));
-                                cv.put(RevizorContract.RevizorEntry.COLUMN_OBJECT_ID, sub.getString("objectId"));
-                                cv.put(RevizorContract.RevizorEntry.COLUMN_OWNER_ID, sub.getString("ownerId"));
-                                cv.put(RevizorContract.RevizorEntry.COLUMN_CREATED, sub.getString("created"));
-                                cv.put(RevizorContract.RevizorEntry.COLUMN_UPDATED, sub.getString("updated"));
+        socket.emit("get", obj, new Ack() {
+            @Override
+            public void call(Object... args) {
+                Log.d("WEBSOCKET", "GOT RESPONSE GET ALL");
+                // put eveything into db
+                try {
+                    JSONObject o = (JSONObject) args[0];
+                    Log.d("WEBSOCKET", o.toString());
+                    JSONObject body = o.getJSONObject("body");
+                    JSONArray array = body.getJSONArray("data");
+                    for (int i = 0; i < array.length(); i++) {
+                        JSONObject entry = array.getJSONObject(i);
+                        JSONObject data = entry.getJSONObject("data");
 
-                                ContentResolver cr = Revizori.getAppContext().getContentResolver();
-                                Uri u = cr.insert(RevizorContract.RevizorEntry.CONTENT_URI, cv);
-                                Log.i("content provider", "insert: " + u.toString());
-                                cr.query(RevizorContract.RevizorEntry.CONTENT_URI, null, null, null, null);
-                            }
+                        ContentValues cv = new ContentValues();
+                        cv.put(RevizorContract.RevizorEntry.COLUMN_LINE_NUMBER, data.getString("line_number"));
+                        cv.put(RevizorContract.RevizorEntry.COLUMN_LATITUDE, data.getString("latitude"));
+                        cv.put(RevizorContract.RevizorEntry.COLUMN_LONGITUDE, data.getString("longitude"));
+                        cv.put(RevizorContract.RevizorEntry.COLUMN_PHOTO_URL, data.getString("photo_url"));
+                        cv.put(RevizorContract.RevizorEntry.COLUMN_COMMENT, data.getString("comment"));
+                        cv.put(RevizorContract.RevizorEntry.COLUMN_OBJECT_ID,  entry.getString("id"));
+                        cv.put(RevizorContract.RevizorEntry.COLUMN_OWNER_ID,  entry.getString("id"));
+                        cv.put(RevizorContract.RevizorEntry.COLUMN_CREATED, data.getString("created"));
+                        cv.put(RevizorContract.RevizorEntry.COLUMN_UPDATED, data.getString("updated"));
 
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        } finally {
-                            // stop refreshing (spinning icon)
-                            // how ??
-
-                        }
-                    }
-                }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                        ContentResolver cr = Revizori.getAppContext().getContentResolver();
+                        Uri u = cr.insert(RevizorContract.RevizorEntry.CONTENT_URI, cv);
+                        Log.i("content provider", "insert ");
+                        cr.query(RevizorContract.RevizorEntry.CONTENT_URI, null, null, null, null);
 
                     }
-                } );
-        VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(br.getRequest());
+                } catch (Exception e){
+                    Log.e("WEBSOCKET", "get all uppaa" + e.getMessage());
+                    e.printStackTrace();
+                }
+
+            }
+        });
 
     }
+
     public void delete(int id){
         Uri uri = RevizorContract.RevizorEntry.buildRevizorUri(id);
         Cursor c = Revizori.getAppContext().getContentResolver().query(uri, null, null, null, null);
@@ -225,8 +235,15 @@ public class RevizorService {
     public void getAll_webSocket(){
 
         final Socket socket;
+        IO.Options opts = new IO.Options();
+        opts.secure = false;
+        opts.port = 1341;
+        opts.reconnection = true;
+        opts.forceNew = true;
+        opts.timeout = 5000;
+
         try {
-            socket = IO.socket("http://sandbox.touch4it.com:1341/data");
+            socket = IO.socket("http://sandbox.touch4it.com:1341", opts);
         } catch (URISyntaxException e) {
             e.printStackTrace();
             return;
@@ -253,6 +270,11 @@ public class RevizorService {
 
         });
         socket.connect();
+
+    }
+
+    public void create_webSocket(){
+
 
     }
 }
