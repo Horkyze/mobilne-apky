@@ -89,24 +89,6 @@ public class RevizorService {
                 Log.d("WEBSICKET", o.toString());
             }
         });
-//
-//        BackendlessJsonRequest request = new BackendlessJsonRequest(Request.Method.POST, Backendless.url, r.getPOSTjson(), new Response.Listener<JSONObject>() {
-//            @Override
-//            public void onResponse(JSONObject response) {
-//                System.out.println(response.toString());
-//            }
-//
-//        }, new Response.ErrorListener() {
-//            @Override
-//            public void onErrorResponse(VolleyError error) {
-//                //Log.e("Volley", error.getMessage());
-//                error.printStackTrace();
-//                Toast.makeText(Revizori.getAppContext(), "Nepodarilo sa vytvoriť nový príspevok", Toast.LENGTH_LONG).show();
-//
-//
-//            }
-//        });
-//        VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(request);
 
     }
 
@@ -176,30 +158,21 @@ public class RevizorService {
         }
         c.close();
 
+        Socket socket = WebSocketHandler.getSocket();
 
-        JSONObject json = new JSONObject();
+        JSONObject obj = new JSONObject();
         try {
-            json.put("objectId", objectId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return;
+            obj.put("url", "/data/" + this.user + "/" + objectId);
+        } catch (Exception e){
+
         }
 
-
-        BackendlessJsonRequest jsonRequest = new BackendlessJsonRequest(Request.Method.DELETE, Backendless.url + "/" +  objectId, json, new Response.Listener<JSONObject>() {
+        socket.emit("delete", obj, new Ack() {
             @Override
-            public void onResponse(JSONObject response) {
-                VolleyLog.d("delete ok", "ok");
-                SyncAdapter.syncImmediately(Revizori.getAppContext());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("delete failed", "not ok");
-                Toast.makeText(Revizori.getAppContext(), "Nepodarilo sa zmazať príspevok", Toast.LENGTH_LONG).show();
+            public void call(Object... args) {
+                Log.d("WEBSOCKET", "DELETE");
             }
         });
-        VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(jsonRequest);
 
     }
 
@@ -216,20 +189,23 @@ public class RevizorService {
         }
         c.close();
 
-        BackendlessJsonRequest jsonRequest = new BackendlessJsonRequest(Request.Method.PUT, Backendless.url + "/" + r.getObjectId(), r.getPUTJson(), new Response.Listener<JSONObject>() {
+        Socket socket = WebSocketHandler.getSocket();
+
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("url", "/data/" + this.user + "/" + r.getObjectId());
+            obj.put("data", new JSONObject().put("data", r.getPOSTjson()));
+        } catch (Exception e){
+
+        }
+
+        socket.emit("put", obj, new Ack() {
             @Override
-            public void onResponse(JSONObject response) {
-                VolleyLog.d("PUT ok", "ok");
-                SyncAdapter.syncImmediately(Revizori.getAppContext());
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("PUT failed", "not ok");
-                Toast.makeText(Revizori.getAppContext(), "Nepodarilo sa upraviť príspevok", Toast.LENGTH_LONG).show();
+            public void call(Object... args) {
+                Log.d("WEBSOCKET", "UPDATE");
             }
         });
-        VolleySingleton.getInstance(Revizori.getAppContext()).getRequestQueue().add(jsonRequest);
+
     }
 
     public void getAll_webSocket(){
