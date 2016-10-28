@@ -10,9 +10,6 @@ Guidline
 https://docs.google.com/document/d/19DZZ__ppIz6NHMs6tv0pr9Go8j3_N3UIHXES5oQWrTw/
 
 Screenshot
-
-http://imgur.com/a/cAkt2
-
-http://imgur.com/a/jbqHj
-
-http://imgur.com/a/xdKZl
+![Screenshot1](http://imgur.com/a/cAkt2 "Screenshot1")
+![Screenshot2](http://imgur.com/a/jbqHj "Screenshot2")
+![Screenshot3](http://imgur.com/a/xdKZl "Screenshot3")
